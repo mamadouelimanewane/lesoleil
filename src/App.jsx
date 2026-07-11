@@ -334,7 +334,7 @@ function AppShell({ tab, setTab, theme, setTheme }) {
 
 export default function App() {
   const [tab, setTab] = useState('home');
-  const [theme, setTheme] = useState('smart');
+  const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
     let activeTheme = theme;
