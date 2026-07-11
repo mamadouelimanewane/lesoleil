@@ -278,8 +278,7 @@ export default function App() {
                 {t.badge && <span className="nav-badge" style={{ background: '#ef4444' }}>{t.badge}</span>}
               </button>
             );
-          });
-          }
+          })}
 
           <span className="nav-section-label" style={{ marginTop: '1rem' }}>Nouveaux Moteurs (2026)</span>
           {TABS.slice(5, 11).map(t => {
