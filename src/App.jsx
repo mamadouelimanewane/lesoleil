@@ -19,6 +19,8 @@ import MemoirePage from './MemoirePage';
 import ExecutifPage from './ExecutifPage';
 import EducationPage from './EducationPage';
 import ZeroDataPage from './ZeroDataPage';
+import AppLandingPage from './AppLandingPage';
+import { APPS_DATA } from './appsData';
 
 /* =======================================
    DATA
@@ -333,7 +335,8 @@ function AppShell({ tab, setTab, theme, setTheme }) {
 }
 
 export default function App() {
-  const [tab, setTab] = useState('home');
+  const [tab, setTab] = useState('home');      // 'home' | appId
+  const [preview, setPreview] = useState(null); // appId being previewed
   const [theme, setTheme] = useState('dark');
 
   useEffect(() => {
@@ -356,9 +359,56 @@ export default function App() {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, [theme]);
 
-  if (tab === 'home') {
-    return <LandingPage setTab={setTab} />;
+  // Navigate to an app: show its landing page first (only if data exists)
+  const handleAppSelect = (id) => {
+    window.scrollTo(0, 0);
+    if (APPS_DATA[id]) {
+      setPreview(id);
+    } else {
+      setTab(id);
+    }
+  };
+
+  // Launch from app landing page into the actual app
+  const handleLaunch = (id) => {
+    window.scrollTo(0, 0);
+    setPreview(null);
+    setTab(id);
+  };
+
+  // Back to main landing page
+  const handleBackHome = () => {
+    window.scrollTo(0, 0);
+    setPreview(null);
+    setTab('home');
+  };
+
+  // 1. Main landing page
+  if (tab === 'home' && !preview) {
+    return <LandingPage setTab={handleAppSelect} />;
   }
 
-  return <AppShell tab={tab} setTab={setTab} theme={theme} setTheme={setTheme} />;
+  // 2. Per-app landing page
+  if (preview) {
+    return (
+      <AppLandingPage
+        data={APPS_DATA[preview]}
+        onLaunch={() => handleLaunch(preview)}
+        onBack={handleBackHome}
+      />
+    );
+  }
+
+  // 3. App shell (actual interface)
+  return (
+    <AppShell
+      tab={tab}
+      setTab={(id) => {
+        if (id === 'home') { handleBackHome(); }
+        else { handleAppSelect(id); }
+      }}
+      theme={theme}
+      setTheme={setTheme}
+    />
+  );
 }
