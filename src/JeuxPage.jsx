@@ -1,204 +1,114 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { RotateCcw, Delete, Trophy } from 'lucide-react';
-
-const WOLOF_WORDS = ['TERANGA', 'JAMM', 'NDANK', 'BAAT', 'SUÑU', 'JËMM', 'NAAN', 'LEKK', 'TOGG', 'YÀLLA'];
-const WORD_OF_DAY = WOLOF_WORDS[new Date().getDate() % WOLOF_WORDS.length];
-const WORD_LENGTH = WORD_OF_DAY.length;
-const MAX_GUESSES = 6;
-
-const QUIZ_QUESTIONS = [
-  { q: 'En quelle année le journal Le Soleil a-t-il été fondé ?', options: ['1960', '1965', '1970', '1975'], answer: 2 },
-  { q: 'Quelle est la capitale du Sénégal ?', options: ['Saint-Louis', 'Thiès', 'Dakar', 'Ziguinchor'], answer: 2 },
-  { q: 'Quel est le surnom de l\'équipe nationale de football ?', options: ['Les Aigles', 'Les Lions de la Téranga', 'Les Éléphants', 'Les Guépards'], answer: 1 },
-  { q: 'Quel fleuve forme la frontière nord du Sénégal ?', options: ['Le Niger', 'Le Sénégal', 'La Gambie', 'La Casamance'], answer: 1 },
-  { q: 'Que signifie "Téranga" en wolof ?', options: ['Courage', 'Fierté', 'Hospitalité', 'Force'], answer: 2 },
-];
-
-const KEYBOARD_ROWS = [
-  ['A','Z','E','R','T','Y','U','I','O','P'],
-  ['Q','S','D','F','G','H','J','K','L','M'],
-  ['ENTER','W','X','C','V','B','N','⌫'],
-];
-
-function WordleGame() {
-  const [guesses, setGuesses] = useState(Array(MAX_GUESSES).fill(''));
-  const [currentGuess, setCurrentGuess] = useState(0);
-  const [currentInput, setCurrentInput] = useState('');
-  const [gameOver, setGameOver] = useState(false);
-  const [won, setWon] = useState(false);
-  const [usedKeys, setUsedKeys] = useState({});
-  const [revealedRows, setRevealedRows] = useState([]);
-
-  const submitGuess = useCallback(() => {
-    if (currentInput.length !== WORD_LENGTH || gameOver) return;
-    
-    const newGuesses = [...guesses];
-    newGuesses[currentGuess] = currentInput;
-    setGuesses(newGuesses);
-    setRevealedRows(prev => [...prev, currentGuess]);
-
-    const newUsedKeys = { ...usedKeys };
-    for (let i = 0; i < currentInput.length; i++) {
-      const letter = currentInput[i];
-      if (WORD_OF_DAY[i] === letter) newUsedKeys[letter] = 'correct';
-      else if (WORD_OF_DAY.includes(letter) && newUsedKeys[letter] !== 'correct') newUsedKeys[letter] = 'present';
-      else if (!WORD_OF_DAY.includes(letter)) newUsedKeys[letter] = 'absent';
-    }
-    setUsedKeys(newUsedKeys);
-
-    if (currentInput === WORD_OF_DAY) { setGameOver(true); setWon(true); }
-    else if (currentGuess >= MAX_GUESSES - 1) { setGameOver(true); }
-    else { setCurrentGuess(currentGuess + 1); }
-    setCurrentInput('');
-  }, [currentInput, currentGuess, gameOver, guesses, usedKeys]);
-
-  const handleKey = useCallback((key) => {
-    if (gameOver) return;
-    if (key === 'ENTER') { submitGuess(); return; }
-    if (key === '⌫' || key === 'BACKSPACE') { setCurrentInput(prev => prev.slice(0, -1)); return; }
-    if (currentInput.length < WORD_LENGTH && /^[A-ZÀ-Ÿ]$/.test(key)) {
-      setCurrentInput(prev => prev + key);
-    }
-  }, [currentInput, gameOver, submitGuess]);
-
-  useEffect(() => {
-    const handler = (e) => handleKey(e.key.toUpperCase());
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [handleKey]);
-
-  const getTileClass = (rowIdx, colIdx) => {
-    if (!revealedRows.includes(rowIdx)) return guesses[rowIdx]?.[colIdx] ? 'filled' : '';
-    const letter = guesses[rowIdx][colIdx];
-    if (!letter) return '';
-    if (WORD_OF_DAY[colIdx] === letter) return 'correct reveal';
-    if (WORD_OF_DAY.includes(letter)) return 'present reveal';
-    return 'absent reveal';
-  };
-
-  const reset = () => {
-    setGuesses(Array(MAX_GUESSES).fill(''));
-    setCurrentGuess(0); setCurrentInput(''); setGameOver(false);
-    setWon(false); setUsedKeys({}); setRevealedRows([]);
-  };
-
-  return (
-    <div>
-      <div className="wordle-board">
-        {Array(MAX_GUESSES).fill(null).map((_, rowIdx) => (
-          <div key={rowIdx} style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-            {Array(WORD_LENGTH).fill(null).map((_, colIdx) => {
-              const letter = rowIdx === currentGuess && !revealedRows.includes(rowIdx)
-                ? currentInput[colIdx] || ''
-                : guesses[rowIdx]?.[colIdx] || '';
-              return (
-                <div key={colIdx} className={`wordle-tile ${getTileClass(rowIdx, colIdx)}`}
-                  style={{ animationDelay: `${colIdx * 0.15}s` }}>
-                  {letter}
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {gameOver && (
-        <div style={{ textAlign: 'center', margin: '1.5rem 0', animation: 'fadeUp 0.4s ease' }}>
-          {won
-            ? <div style={{ color: '#10b981', fontSize: '1.2rem', fontWeight: 700 }}><Trophy size={24} style={{verticalAlign:'middle'}}/> Bravo ! Vous avez trouvé "{WORD_OF_DAY}" !</div>
-            : <div style={{ color: '#f87171' }}>Le mot était : <strong>{WORD_OF_DAY}</strong></div>}
-          <button className="btn btn-primary" onClick={reset} style={{ marginTop: '1rem' }}><RotateCcw size={16} /> Rejouer</button>
-        </div>
-      )}
-
-      <div className="keyboard">
-        {KEYBOARD_ROWS.map((row, i) => (
-          <div key={i} style={{ display: 'flex', gap: '6px', justifyContent: 'center' }}>
-            {row.map(k => (
-              <button key={k}
-                className={`key ${k === 'ENTER' || k === '⌫' ? 'wide' : ''} ${usedKeys[k] || ''}`}
-                onClick={() => handleKey(k)}>
-                {k === '⌫' ? <Delete size={18}/> : k}
-              </button>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function QuizGame() {
-  const [qIdx, setQIdx] = useState(0);
-  const [selected, setSelected] = useState(null);
-  const [score, setScore] = useState(0);
-  const [finished, setFinished] = useState(false);
-
-  const q = QUIZ_QUESTIONS[qIdx];
-  
-  const select = (idx) => {
-    if (selected !== null) return;
-    setSelected(idx);
-    if (idx === q.answer) setScore(s => s + 1);
-    setTimeout(() => {
-      if (qIdx < QUIZ_QUESTIONS.length - 1) { setQIdx(i => i + 1); setSelected(null); }
-      else setFinished(true);
-    }, 1200);
-  };
-
-  const reset = () => { setQIdx(0); setSelected(null); setScore(0); setFinished(false); };
-
-  if (finished) return (
-    <div style={{ textAlign: 'center', padding: '2rem', animation: 'fadeUp 0.4s ease' }}>
-      <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
-      <h3>Score : {score} / {QUIZ_QUESTIONS.length}</h3>
-      <p style={{ margin: '1rem 0' }}>{score === QUIZ_QUESTIONS.length ? 'Parfait !' : score >= 3 ? 'Bien joué !' : 'Réessayez demain !'}</p>
-      <button className="btn btn-primary" onClick={reset}><RotateCcw size={16}/> Recommencer</button>
-    </div>
-  );
-
-  return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-        <span>Question {qIdx + 1}/{QUIZ_QUESTIONS.length}</span>
-        <span>Score : {score}</span>
-      </div>
-      <div className="quiz-card glass" style={{ padding: '2rem', marginBottom: '1.5rem' }}>
-        <h3 style={{ marginBottom: '0.5rem' }}>{q.q}</h3>
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        {q.options.map((opt, i) => (
-          <button key={i}
-            className={`quiz-option ${selected === i ? (i === q.answer ? 'correct-answer' : 'wrong-answer') : ''} ${selected !== null && i === q.answer ? 'correct-answer' : ''}`}
-            onClick={() => select(i)}>
-            {opt}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
+import React, { useState } from 'react';
+import { Share2, PlayCircle, Trophy, BarChart2, CheckCircle, ChevronLeft } from 'lucide-react';
 
 export default function JeuxPage() {
-  const [activeGame, setActiveGame] = useState('wordle');
+  const [tab, setTab] = useState('wordle'); // wordle, quiz
+  const [view, setView] = useState('home'); // home, result
+
+  const keyboard = [
+    ['A','Z','E','R','T','Y','U','I','O','P'],
+    ['Q','S','D','F','G','H','J','K','L','M'],
+    ['ENTER','W','X','C','V','B','N','DEL']
+  ];
+
+  if (view === 'result') {
+    return (
+      <div className="fade-up" style={{ padding: '2rem', maxWidth: '600px', margin: '0 auto', textAlign: 'center' }}>
+        <button className="btn btn-ghost btn-sm" onClick={() => setView('home')} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0 auto 2rem' }}>
+          <ChevronLeft size={16} /> Rejouer
+        </button>
+        
+        <Trophy size={64} color="#f59e0b" style={{ margin: '0 auto 1.5rem' }} />
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Félicitations !</h2>
+        <p style={{ color: 'var(--text-sub)', fontSize: '1.1rem', marginBottom: '2rem' }}>Vous avez trouvé le mot du jour en 4 essais.</p>
+        
+        <div className="glass" style={{ padding: '2rem', marginBottom: '2rem' }}>
+          <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Statistiques</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)' }}>12</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Joués</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: '#10b981' }}>100%</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Victoires</div>
+            </div>
+            <div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: '#f59e0b' }}>4</div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Série Actuelle</div>
+            </div>
+          </div>
+        </div>
+
+        <button className="btn btn-primary btn-full" style={{ background: '#10b981', border: 'none', color: '#fff', fontSize: '1.1rem', padding: '1rem', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
+          <Share2 size={20} /> Partager mon résultat (WhatsApp)
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="fade-up">
       <div className="page-header">
-        <h2>Soleil Jeux</h2>
-        <p>Jouez chaque jour et partagez vos résultats sur WhatsApp !</p>
+        <h2 style={{ color: 'var(--text-main)' }}>Soleil Jeux</h2>
+        <p style={{ color: 'var(--text-muted)' }}>Fidélisation quotidienne par des jeux culturels et linguistiques.</p>
       </div>
-      <div className="jeux-tabs">
-        <button className={`jeux-tab ${activeGame === 'wordle' ? 'active' : ''}`} onClick={() => setActiveGame('wordle')}>🇸🇳 Baat Bu Toj (Wordle Wolof)</button>
-        <button className={`jeux-tab ${activeGame === 'quiz' ? 'active' : ''}`} onClick={() => setActiveGame('quiz')}>🎯 Kaay Xam (Quiz du Jour)</button>
+
+      <div className="jeux-tabs" style={{ display: 'flex', gap: '1rem', marginBottom: '2rem', justifyContent: 'center' }}>
+        <button className={`jeux-tab ${tab === 'wordle' ? 'active' : ''}`} onClick={() => setTab('wordle')} style={{ padding: '0.5rem 1rem', background: tab === 'wordle' ? 'var(--primary)' : 'transparent', color: tab === 'wordle' ? '#000' : 'var(--text-main)', border: '1px solid var(--border)', borderRadius: '20px', fontWeight: 600 }}>Mot du Jour (Wolof)</button>
+        <button className={`jeux-tab ${tab === 'quiz' ? 'active' : ''}`} onClick={() => setTab('quiz')} style={{ padding: '0.5rem 1rem', background: tab === 'quiz' ? 'var(--primary)' : 'transparent', color: tab === 'quiz' ? '#000' : 'var(--text-main)', border: '1px solid var(--border)', borderRadius: '20px', fontWeight: 600 }}>Quiz Actualité</button>
       </div>
-      <div className="glass" style={{ padding: '2rem', marginTop: '1.5rem' }}>
-        {activeGame === 'wordle' ? <WordleGame /> : <QuizGame />}
-      </div>
-      <div className="game-stats glass" style={{ marginTop: '1.5rem', padding: '1.5rem', display: 'flex', gap: '2rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-        <div style={{ textAlign: 'center' }}><div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)' }}>7</div><div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Série en cours</div></div>
-        <div style={{ textAlign: 'center' }}><div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)' }}>42</div><div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Parties jouées</div></div>
-        <div style={{ textAlign: 'center' }}><div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--primary)' }}>85%</div><div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Taux de victoire</div></div>
-      </div>
+
+      {tab === 'wordle' && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div className="wordle-board" style={{ display: 'grid', gridTemplateRows: 'repeat(6, 1fr)', gap: '6px', marginBottom: '2rem' }}>
+            {/* Example Board State */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px' }}>
+              <div className="wordle-tile absent" style={{ width: '50px', height: '50px', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold', background: 'rgba(128,128,128,0.2)', color: 'var(--text-main)' }}>X</div>
+              <div className="wordle-tile present" style={{ width: '50px', height: '50px', border: '2px solid #f59e0b', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold', background: '#f59e0b', color: '#000' }}>A</div>
+              <div className="wordle-tile absent" style={{ width: '50px', height: '50px', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold', background: 'rgba(128,128,128,0.2)', color: 'var(--text-main)' }}>L</div>
+              <div className="wordle-tile correct" style={{ width: '50px', height: '50px', border: '2px solid #10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold', background: '#10b981', color: '#000' }}>I</div>
+              <div className="wordle-tile absent" style={{ width: '50px', height: '50px', border: '2px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem', fontWeight: 'bold', background: 'rgba(128,128,128,0.2)', color: 'var(--text-main)' }}>S</div>
+            </div>
+            {/* Empty Rows */}
+            {[1, 2, 3, 4, 5].map(i => (
+              <div key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '6px' }}>
+                {[1, 2, 3, 4, 5].map(j => (
+                  <div key={j} className="wordle-tile" style={{ width: '50px', height: '50px', border: '2px solid var(--border)' }}></div>
+                ))}
+              </div>
+            ))}
+          </div>
+
+          <div className="keyboard" style={{ width: '100%', maxWidth: '500px', display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'center' }}>
+            {keyboard.map((row, i) => (
+              <div key={i} style={{ display: 'flex', gap: '6px' }}>
+                {row.map(key => (
+                  <button key={key} className={`key ${key.length > 1 ? 'wide' : ''}`} onClick={() => key === 'ENTER' && setView('result')} style={{ padding: '12px 10px', minWidth: key.length > 1 ? '60px' : '36px', background: 'var(--bg-card)', border: '1px solid var(--border)', color: 'var(--text-main)', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer' }}>
+                    {key}
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab === 'quiz' && (
+        <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+          <div className="quiz-card glass" style={{ padding: '2rem' }}>
+            <span style={{ fontSize: '0.8rem', color: '#8b5cf6', fontWeight: 'bold', textTransform: 'uppercase' }}>Question 1/5</span>
+            <h3 style={{ fontSize: '1.4rem', margin: '1rem 0', color: 'var(--text-main)' }}>Quel est le taux de croissance économique prévu pour le Sénégal en 2026 selon la Banque Mondiale ?</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <button className="quiz-option" style={{ padding: '1rem', background: 'rgba(128,128,128,0.1)', border: '1px solid var(--border)', borderRadius: '8px', textAlign: 'left', color: 'var(--text-main)', cursor: 'pointer' }}>A) 4.2%</button>
+              <button className="quiz-option correct-answer" style={{ padding: '1rem', background: 'rgba(16,185,129,0.1)', border: '1px solid #10b981', borderRadius: '8px', textAlign: 'left', color: 'var(--text-main)', cursor: 'pointer', display: 'flex', justifyContent: 'space-between' }}>
+                B) 8.3% <CheckCircle color="#10b981" size={20} />
+              </button>
+              <button className="quiz-option" style={{ padding: '1rem', background: 'rgba(128,128,128,0.1)', border: '1px solid var(--border)', borderRadius: '8px', textAlign: 'left', color: 'var(--text-main)', cursor: 'pointer' }}>C) 12.1%</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

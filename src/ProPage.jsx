@@ -1,127 +1,121 @@
-import React from 'react';
-import { Database, FileText, Bell, TrendingUp, Shield, BarChart3, Building2 } from 'lucide-react';
-
-const REPORTS = [
-  { title: 'Secteur Pétrolier & Gazier — T2 2026', tag: 'Nouveau', tagColor: '#10b981', pages: 42 },
-  { title: 'Immobilier & BTP au Sénégal — Bilan Semestriel', tag: null, pages: 38 },
-  { title: 'Agriculture : Campagne Arachidière 2026', tag: null, pages: 27 },
-  { title: 'Télécoms & Numérique — Panorama Annuel', tag: 'Nouveau', tagColor: '#10b981', pages: 55 },
-  { title: 'Secteur Bancaire : Classement & Analyses', tag: null, pages: 33 },
-];
-
-const MARCHES = [
-  { ref: 'MP-2026-4521', org: 'Ministère des Transports', objet: 'Construction de 45km de route Tambacounda-Kédougou', montant: '12,4 Mds FCFA', deadline: '25 Juil 2026', status: 'Ouvert' },
-  { ref: 'MP-2026-4519', org: 'SENELEC', objet: 'Fourniture de 200 transformateurs électriques', montant: '3,8 Mds FCFA', deadline: '18 Juil 2026', status: 'Ouvert' },
-  { ref: 'MP-2026-4515', org: 'Mairie de Dakar', objet: 'Aménagement paysager du Plateau', montant: '890 M FCFA', deadline: '30 Juil 2026', status: 'Ouvert' },
-  { ref: 'MP-2026-4510', org: 'Min. Santé', objet: 'Équipement de 15 postes de santé ruraux', montant: '1,2 Mds FCFA', deadline: '12 Juil 2026', status: 'Clôturé' },
-];
+import React, { useState } from 'react';
+import { Briefcase, BarChart, Download, FileText, Lock, ChevronLeft, TrendingUp } from 'lucide-react';
 
 export default function ProPage() {
-  return (
-    <div className="fade-up">
-      {/* Pro Hero */}
-      <div className="pro-hero">
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', background: 'rgba(139,92,246,0.15)', border: '1px solid rgba(139,92,246,0.3)', color: '#a78bfa', padding: '0.35rem 1rem', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 600, marginBottom: '1.5rem' }}>
-            <Building2 size={14} /> Solutions Professionnelles
-          </div>
-          <h1 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', marginBottom: '1rem' }}>Soleil Pro — Données &amp; Intelligence Économique</h1>
-          <p style={{ fontSize: '1.05rem', maxWidth: '550px' }}>La référence pour les données économiques sénégalaises. Marchés publics, rapports sectoriels, alertes réglementaires.</p>
-        </div>
-      </div>
+  const [view, setView] = useState('home'); // home, dashboard
 
-      {/* Stats */}
-      <div className="pro-stats-row">
-        {[
-          { icon: <FileText size={22}/>, num: '1 250+', label: 'Marchés publics indexés' },
-          { icon: <BarChart3 size={22}/>, num: '45', label: 'Rapports sectoriels' },
-          { icon: <Bell size={22}/>, num: '200+', label: 'Alertes / mois' },
-          { icon: <Building2 size={22}/>, num: '380', label: 'Entreprises abonnées' },
-        ].map((s, i) => (
-          <div key={i} className="pro-stat-card glass">
-            <div style={{ color: 'var(--accent)' }}>{s.icon}</div>
-            <div style={{ fontSize: '1.8rem', fontWeight: 800, fontFamily: 'Outfit', color: 'var(--primary)' }}>{s.num}</div>
-            <div style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>{s.label}</div>
-          </div>
-        ))}
-      </div>
+  if (view === 'dashboard') {
+    return (
+      <div className="fade-up">
+        <button className="btn btn-ghost btn-sm" onClick={() => setView('home')} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <ChevronLeft size={16} /> Retour à l'espace B2B
+        </button>
 
-      {/* Marchés Publics */}
-      <div className="section-header" style={{ marginTop: '2rem' }}>
-        <h3><Database size={20} style={{ verticalAlign: 'middle' }} /> Marchés Publics Récents</h3>
-        <button className="btn btn-ghost btn-sm">Voir tout</button>
-      </div>
-      <div className="glass" style={{ borderRadius: 'var(--radius-lg)', overflow: 'hidden' }}>
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Réf.</th>
-              <th>Organisme</th>
-              <th>Objet</th>
-              <th>Montant</th>
-              <th>Date limite</th>
-              <th>Statut</th>
-            </tr>
-          </thead>
-          <tbody>
-            {MARCHES.map((m, i) => (
-              <tr key={i}>
-                <td style={{ fontFamily: 'monospace', fontSize: '0.82rem' }}>{m.ref}</td>
-                <td style={{ fontWeight: 600 }}>{m.org}</td>
-                <td>{m.objet}</td>
-                <td style={{ whiteSpace: 'nowrap', fontWeight: 600 }}>{m.montant}</td>
-                <td style={{ whiteSpace: 'nowrap' }}>{m.deadline}</td>
-                <td><span className={`alert-tag ${m.status === 'Ouvert' ? '' : 'closed'}`}>{m.status}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Rapports */}
-      <div className="section-header" style={{ marginTop: '2.5rem' }}>
-        <h3><TrendingUp size={20} style={{ verticalAlign: 'middle' }} /> Rapports Sectoriels</h3>
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-        {REPORTS.map((r, i) => (
-          <div key={i} className="report-card glass">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <FileText size={28} style={{ color: 'var(--accent)', flexShrink: 0 }} />
-              <div>
-                <h4 style={{ fontSize: '0.95rem', marginBottom: '0.3rem' }}>{r.title}</h4>
-                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{r.pages} pages • PDF</div>
-              </div>
-              {r.tag && <span className="alert-tag" style={{ background: `${r.tagColor}22`, color: r.tagColor, marginLeft: 'auto' }}>{r.tag}</span>}
+        <div className="glass" style={{ padding: '3rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
+            <div>
+              <h2 style={{ fontSize: '2rem', color: 'var(--text-main)' }}>Secteur BTP & Infrastructures</h2>
+              <p style={{ color: 'var(--text-muted)' }}>Analyse de marché T3 2026 - Marchés Publics Sénégal</p>
             </div>
-            <button className="btn btn-ghost btn-sm btn-full" style={{ marginTop: '1rem' }}>Télécharger</button>
-          </div>
-        ))}
-      </div>
-
-      {/* Pricing */}
-      <div className="section-header" style={{ marginTop: '2.5rem' }}>
-        <h3><Shield size={20} style={{ verticalAlign: 'middle' }} /> Offres B2B</h3>
-      </div>
-      <div className="pro-tier-grid">
-        {[
-          { name: 'Starter', price: '50 000', period: 'FCFA/mois', features: ['Accès marchés publics', '5 rapports/mois', 'Alertes email', 'Support standard'] },
-          { name: 'Business', price: '200 000', period: 'FCFA/mois', featured: true, features: ['Tout Starter +', 'Rapports illimités', 'API d\'accès données', 'Alertes personnalisées', '5 utilisateurs inclus', 'Support prioritaire'] },
-          { name: 'Enterprise', price: 'Sur devis', period: '', features: ['Tout Business +', 'Utilisateurs illimités', 'Données sur mesure', 'Account manager dédié', 'Formation incluse'] },
-        ].map((t, i) => (
-          <div key={i} className={`pro-tier-card glass ${t.featured ? 'featured' : ''}`}>
-            {t.featured && <div className="badge-featured">⭐ Populaire</div>}
-            <h3>{t.name}</h3>
-            <div style={{ fontFamily: 'Outfit', fontSize: '2rem', fontWeight: 800, color: 'var(--primary)', margin: '1rem 0' }}>
-              {t.price} <span style={{ fontSize: '0.9rem', fontWeight: 400, color: 'var(--text-muted)' }}>{t.period}</span>
-            </div>
-            <ul className="pricing-features">
-              {t.features.map((f, j) => <li key={j}>{f}</li>)}
-            </ul>
-            <button className={`btn ${t.featured ? 'btn-primary' : 'btn-ghost'} btn-full`} style={{ marginTop: '1.5rem' }}>
-              {t.price === 'Sur devis' ? 'Nous contacter' : 'Commencer'}
+            <button className="btn btn-primary" style={{ background: '#3b82f6', border: 'none', color: '#fff', display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <Download size={16} /> Exporter Rapport PDF
             </button>
           </div>
-        ))}
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.2)', padding: '1.5rem', borderRadius: '12px' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Volume Global</div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-main)' }}>450 Mds <span style={{ fontSize: '1rem' }}>CFA</span></div>
+            </div>
+            <div style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.2)', padding: '1.5rem', borderRadius: '12px' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Croissance Annuelle</div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><TrendingUp size={24} /> +12.4%</div>
+            </div>
+            <div style={{ background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.2)', padding: '1.5rem', borderRadius: '12px' }}>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Appels d'Offres Actifs</div>
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: '#f59e0b' }}>84</div>
+            </div>
+          </div>
+
+          <div style={{ background: 'var(--bg-card)', padding: '2rem', borderRadius: '12px', border: '1px solid var(--border)' }}>
+            <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>Évolution des investissements par région (Top 5)</h3>
+            {/* Fake Chart representation */}
+            <div style={{ display: 'flex', alignItems: 'flex-end', height: '250px', gap: '2rem', paddingBottom: '1rem', borderBottom: '1px solid var(--border)', position: 'relative' }}>
+              <div style={{ width: '100%', position: 'absolute', bottom: '25%', borderTop: '1px dashed rgba(128,128,128,0.3)' }}></div>
+              <div style={{ width: '100%', position: 'absolute', bottom: '50%', borderTop: '1px dashed rgba(128,128,128,0.3)' }}></div>
+              <div style={{ width: '100%', position: 'absolute', bottom: '75%', borderTop: '1px dashed rgba(128,128,128,0.3)' }}></div>
+              
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
+                <div style={{ width: '60px', height: '80%', background: 'linear-gradient(to top, #3b82f6, #60a5fa)', borderRadius: '4px 4px 0 0' }}></div>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-sub)' }}>Dakar</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
+                <div style={{ width: '60px', height: '60%', background: 'linear-gradient(to top, #3b82f6, #60a5fa)', borderRadius: '4px 4px 0 0', opacity: 0.8 }}></div>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-sub)' }}>Thiès</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
+                <div style={{ width: '60px', height: '45%', background: 'linear-gradient(to top, #3b82f6, #60a5fa)', borderRadius: '4px 4px 0 0', opacity: 0.6 }}></div>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-sub)' }}>Saint-Louis</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
+                <div style={{ width: '60px', height: '30%', background: 'linear-gradient(to top, #3b82f6, #60a5fa)', borderRadius: '4px 4px 0 0', opacity: 0.4 }}></div>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-sub)' }}>Kaolack</span>
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', zIndex: 1 }}>
+                <div style={{ width: '60px', height: '20%', background: 'linear-gradient(to top, #3b82f6, #60a5fa)', borderRadius: '4px 4px 0 0', opacity: 0.2 }}></div>
+                <span style={{ fontSize: '0.85rem', color: 'var(--text-sub)' }}>Ziguinchor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fade-up">
+      <div className="pro-hero glass" style={{ background: 'linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1))', padding: '3rem', borderRadius: '24px', border: '1px solid rgba(59,130,246,0.2)', marginBottom: '3rem', textAlign: 'center' }}>
+        <Briefcase size={48} color="#3b82f6" style={{ margin: '0 auto 1rem' }} />
+        <h2 style={{ fontSize: '2.5rem', color: 'var(--text-main)', marginBottom: '1rem' }}>Le Soleil Pro</h2>
+        <p style={{ color: 'var(--text-sub)', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto 2rem' }}>
+          La plateforme d'intelligence économique pour les entreprises. Accédez aux données des marchés publics, analyses sectorielles et annonces légales.
+        </p>
+        <button className="btn btn-primary" style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '1rem 2rem', fontSize: '1.1rem' }}>S'abonner à partir de 50 000 CFA/mois</button>
+      </div>
+
+      <h3 style={{ fontSize: '1.4rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Rapports Sectoriels (Exclusivité Pro)</h3>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+        <div className="report-card glass" style={{ padding: '1.5rem', cursor: 'pointer', transition: '0.2s' }} onClick={() => setView('dashboard')}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+            <div style={{ width: '48px', height: '48px', background: 'rgba(59,130,246,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <BarChart color="#3b82f6" />
+            </div>
+            <div>
+              <h4 style={{ color: 'var(--text-main)' }}>BTP & Infrastructures</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Mise à jour: Aujourd'hui</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', color: 'var(--primary)' }}>
+            <span>Voir le tableau de bord</span>
+            <ChevronRight size={16} />
+          </div>
+        </div>
+
+        <div className="report-card glass" style={{ padding: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+            <div style={{ width: '48px', height: '48px', background: 'rgba(16,185,129,0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <BarChart color="#10b981" />
+            </div>
+            <div>
+              <h4 style={{ color: 'var(--text-main)' }}>Énergie & Hydrocarbures</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Mise à jour: Hier</p>
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.9rem', color: '#10b981' }}>
+            <span>Accès Premium</span>
+            <Lock size={16} />
+          </div>
+        </div>
       </div>
     </div>
   );

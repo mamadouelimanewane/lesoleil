@@ -1,123 +1,87 @@
-import React from 'react';
-import { Calendar, MapPin, Users, Ticket, ArrowRight, Clock } from 'lucide-react';
-
-const EVENTS = [
-  {
-    id: 1, date: '15', month: 'OCT', type: 'Forum', typeClass: 'event-type-forum',
-    title: 'Le Sénégal Numérique 2026',
-    desc: 'Grand forum économique réunissant décideurs, startups et investisseurs pour tracer l\'avenir numérique du pays.',
-    location: 'Centre International de Conférences Abdou Diouf (CICAD), Diamniadio',
-    time: '08:30 - 18:00',
-    featured: true
-  },
-  {
-    id: 2, date: '22', month: 'OCT', type: 'Masterclass', typeClass: 'event-type-masterclass',
-    title: 'Masterclass : Journalisme d\'Investigation',
-    desc: 'Apprenez les techniques d\'investigation avec les grands reporters de la rédaction du Soleil.',
-    location: 'Siège Le Soleil, Hann Bel-Air, Dakar',
-    time: '09:00 - 13:00',
-    featured: false
-  },
-  {
-    id: 3, date: '05', month: 'NOV', type: 'Débat', typeClass: 'event-type-debat',
-    title: 'Table Ronde : L\'Agriculture de Demain',
-    desc: 'Les enjeux de l\'autosuffisance alimentaire face aux changements climatiques.',
-    location: 'Chambre de Commerce, Dakar',
-    time: '15:00 - 17:30',
-    featured: false
-  },
-  {
-    id: 4, date: '12', month: 'NOV', type: 'Concours', typeClass: 'event-type-concours',
-    title: 'Prix de la Plume du Soleil',
-    desc: 'Remise des prix du concours national de nouvelles littéraires pour les jeunes talents.',
-    location: 'Théâtre National Daniel Sorano, Dakar',
-    time: '19:00 - 22:00',
-    featured: false
-  }
-];
+import React, { useState } from 'react';
+import { Calendar, MapPin, Users, Ticket, ArrowRight, QrCode, ChevronLeft, Download } from 'lucide-react';
 
 export default function EventsPage() {
-  return (
-    <div className="fade-up">
-      <div className="page-header">
-        <h2>Le Soleil Events</h2>
-        <p>Forums, masterclasses et rencontres — participez à la vie de la communauté</p>
-      </div>
+  const [view, setView] = useState('home'); // home, ticket
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
-        
-        {/* Featured Event */}
-        {EVENTS.filter(e => e.featured).map(e => (
-          <div key={e.id} className="event-featured glass" style={{ position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(135deg, rgba(30,58,138,0.4), rgba(15,23,42,0.8))', zIndex: 0 }}></div>
-            <div style={{ position: 'relative', zIndex: 1, padding: '3rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-                <span className={`event-type-chip ${e.typeClass}`}>{e.type}</span>
-                <div className="event-date-badge">
-                  <span style={{ fontSize: '2.5rem', fontWeight: 800, lineHeight: 1 }}>{e.date}</span>
-                  <span style={{ fontSize: '1rem', fontWeight: 600 }}>{e.month}</span>
+  if (view === 'ticket') {
+    return (
+      <div className="fade-up">
+        <button className="btn btn-ghost btn-sm" onClick={() => setView('home')} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <ChevronLeft size={16} /> Retour aux événements
+        </button>
+
+        <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+          <div className="glass" style={{ borderRadius: '24px', overflow: 'hidden', border: '1px solid var(--border)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+            <div style={{ background: 'linear-gradient(135deg, #ec4899, #be185d)', padding: '2rem', textAlign: 'center', color: '#fff' }}>
+              <div style={{ display: 'inline-block', background: 'rgba(255,255,255,0.2)', padding: '0.3rem 0.8rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, marginBottom: '1rem' }}>Billet Confirmé</div>
+              <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem', lineHeight: 1.2 }}>Forum Économique du Soleil</h2>
+              <p style={{ opacity: 0.8, fontSize: '0.9rem' }}>Billet d'entrée valide pour 1 personne</p>
+            </div>
+            
+            <div style={{ padding: '2rem', background: '#fff', color: '#000', position: 'relative' }}>
+              {/* Ticket cutouts */}
+              <div style={{ position: 'absolute', top: '-15px', left: '-15px', width: '30px', height: '30px', background: 'var(--bg)', borderRadius: '50%' }}></div>
+              <div style={{ position: 'absolute', top: '-15px', right: '-15px', width: '30px', height: '30px', background: 'var(--bg)', borderRadius: '50%' }}></div>
+              
+              <div style={{ borderBottom: '2px dashed #e5e7eb', paddingBottom: '1.5rem', marginBottom: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Date</div>
+                  <div style={{ fontWeight: 600, fontSize: '1rem' }}>14 Sep 2026</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Heure</div>
+                  <div style={{ fontWeight: 600, fontSize: '1rem' }}>09:00 - 18:00</div>
+                </div>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Lieu</div>
+                  <div style={{ fontWeight: 600, fontSize: '1rem' }}>CICAD, Diamniadio</div>
+                </div>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#6b7280', textTransform: 'uppercase', marginBottom: '0.2rem' }}>Participant</div>
+                  <div style={{ fontWeight: 600, fontSize: '1rem' }}>M. Amadou Fall</div>
                 </div>
               </div>
-              
-              <div>
-                <h3 style={{ fontSize: '2.2rem', marginBottom: '1rem', color: 'white' }}>{e.title}</h3>
-                <p style={{ fontSize: '1.1rem', maxWidth: '600px', color: 'rgba(255,255,255,0.8)' }}>{e.desc}</p>
-              </div>
 
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.5rem', marginTop: '1rem' }}>
-                <div className="event-location"><MapPin size={18} /> {e.location}</div>
-                <div className="event-location"><Clock size={18} /> {e.time}</div>
-              </div>
-
-              <div style={{ marginTop: '1rem' }}>
-                <button className="btn btn-primary" style={{ padding: '0.8rem 2rem' }}>S'inscrire à l'événement <ArrowRight size={18} /></button>
+              <div style={{ textAlign: 'center' }}>
+                <QrCode size={150} color="#000" style={{ margin: '0 auto 1rem' }} />
+                <p style={{ fontSize: '0.8rem', color: '#6b7280', fontFamily: 'monospace' }}>TKT-849204-XYZ</p>
               </div>
             </div>
           </div>
-        ))}
-
-        {/* Timeline Events */}
-        <div className="section-header" style={{ marginTop: '1rem' }}>
-          <h3>Agenda à venir</h3>
+          
+          <button className="btn btn-primary" style={{ width: '100%', marginTop: '1.5rem', display: 'flex', justifyContent: 'center', gap: '0.5rem', background: '#ec4899', color: '#fff', border: 'none' }}>
+            <Download size={18} /> Télécharger le PDF
+          </button>
         </div>
-        
-        <div className="events-timeline">
-          {EVENTS.filter(e => !e.featured).map((e, index) => (
-            <div key={e.id} style={{ display: 'flex', gap: '2rem', position: 'relative' }}>
-              {/* Timeline Line & Node */}
-              <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div className="event-node"></div>
-                {index < EVENTS.length - 2 && <div style={{ width: '2px', height: '100%', background: 'var(--border)', position: 'absolute', top: '24px', bottom: '-24px' }}></div>}
-              </div>
+      </div>
+    );
+  }
 
-              {/* Event Card */}
-              <div className="event-card-timeline glass" style={{ flex: 1, padding: '1.5rem', marginBottom: '2rem', display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
-                <div className="event-date-badge" style={{ minWidth: '80px', height: '80px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'rgba(255,255,255,0.05)', borderRadius: '12px' }}>
-                  <span style={{ fontSize: '1.8rem', fontWeight: 800, lineHeight: 1 }}>{e.date}</span>
-                  <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--primary)' }}>{e.month}</span>
-                </div>
-                
-                <div style={{ flex: 1, minWidth: '250px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
-                    <span className={`event-type-chip ${e.typeClass}`}>{e.type}</span>
-                    <h4 style={{ fontSize: '1.2rem', margin: 0 }}>{e.title}</h4>
-                  </div>
-                  <p style={{ fontSize: '0.9rem', color: 'var(--text-sub)', marginBottom: '1rem' }}>{e.desc}</p>
-                  
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><MapPin size={14} /> {e.location}</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}><Clock size={14} /> {e.time}</span>
-                  </div>
-                </div>
+  return (
+    <div className="fade-up">
+      <div className="page-header" style={{ marginBottom: '3rem' }}>
+        <h2 style={{ color: 'var(--text-main)' }}>Le Soleil Events</h2>
+        <p style={{ color: 'var(--text-muted)' }}>La régie événementielle intégrée. Forums, Masterclasses et Débats.</p>
+      </div>
 
-                <div style={{ display: 'flex', alignItems: 'center' }}>
-                   <button className="btn btn-ghost"><Ticket size={16} /> Billet</button>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="event-featured glass" style={{ padding: '3rem', display: 'flex', flexWrap: 'wrap', gap: '2rem', background: 'linear-gradient(135deg, rgba(236,72,153,0.1), rgba(190,24,93,0.1))', border: '1px solid rgba(236,72,153,0.2)', marginBottom: '3rem' }}>
+        <div style={{ flex: 1, minWidth: '300px' }}>
+          <span className="event-type-chip event-type-forum" style={{ background: '#ec4899', color: '#fff', padding: '0.3rem 0.8rem', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600, display: 'inline-block', marginBottom: '1rem' }}>Grand Forum</span>
+          <h2 style={{ fontSize: '2.5rem', color: 'var(--text-main)', marginBottom: '1rem' }}>Forum Économique du Soleil 2026</h2>
+          <p style={{ fontSize: '1.1rem', color: 'var(--text-sub)', marginBottom: '2rem' }}>
+            Rencontre au sommet entre le gouvernement, le secteur privé et les investisseurs internationaux. Bilan et perspectives de l'économie sénégalaise.
+          </p>
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}><Calendar size={18} color="#ec4899" /> 14 Septembre 2026</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}><MapPin size={18} color="#ec4899" /> CICAD, Diamniadio</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-main)' }}><Users size={18} color="#ec4899" /> 1500+ participants</div>
+          </div>
+          <button className="btn btn-primary" onClick={() => setView('ticket')} style={{ background: '#ec4899', color: '#fff', border: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Ticket size={18} /> Obtenir un Billet <ArrowRight size={16} />
+          </button>
         </div>
-
+        <div style={{ width: '300px', height: '300px', background: 'url(https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80) center/cover', borderRadius: '16px', boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }}></div>
       </div>
     </div>
   );

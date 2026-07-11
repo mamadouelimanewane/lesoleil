@@ -1,106 +1,111 @@
 import React, { useState } from 'react';
-import { Play, Pause, SkipForward, SkipBack, Volume2, Headphones, Mic } from 'lucide-react';
-
-const PODCASTS = [
-  { id: 1, emoji: '🌅', title: 'Le Journal Parlé du Soleil', desc: 'L\'actu du jour en 10 minutes', cat: 'Quotidien', dur: '10 min', episodes: 342 },
-  { id: 2, emoji: '🔍', title: 'Soleil Enquêtes', desc: 'Reportages longs formats et investigations', cat: 'Bi-mensuel', dur: '35-50 min', episodes: 28 },
-  { id: 3, emoji: '💬', title: 'Ndaje Soleil', desc: 'Le grand débat hebdomadaire de société', cat: 'Hebdomadaire', dur: '1h', episodes: 89 },
-  { id: 4, emoji: '📚', title: 'Soleil Histoire', desc: 'Les grandes pages de l\'histoire du Sénégal racontées', cat: 'Mensuel', dur: '25 min', episodes: 15 },
-];
-
-const EPISODES = [
-  { id: 1, podcast: 'Journal Parlé', title: 'Édition du 11 Juillet 2026', dur: '10:24', date: 'Aujourd\'hui' },
-  { id: 2, podcast: 'Journal Parlé', title: 'Édition du 10 Juillet 2026', dur: '11:02', date: 'Hier' },
-  { id: 3, podcast: 'Ndaje Soleil', title: 'Réforme de l\'éducation : pour ou contre ?', dur: '58:30', date: 'Il y a 2 jours' },
-  { id: 4, podcast: 'Soleil Enquêtes', title: 'L\'or noir du Sénégal : qui en profite vraiment ?', dur: '42:15', date: 'Il y a 5 jours' },
-  { id: 5, podcast: 'Soleil Histoire', title: 'Léopold Sédar Senghor : le poète-président', dur: '28:40', date: 'Il y a 1 semaine' },
-];
+import { Play, Pause, SkipBack, SkipForward, Volume2, Mic, FileAudio, ChevronLeft } from 'lucide-react';
 
 export default function AudioPage() {
-  const [playing, setPlaying] = useState(null);
-  const [progress, setProgress] = useState(35);
+  const [playing, setPlaying] = useState(false);
+  const [view, setView] = useState('home'); // home, player
+
+  if (view === 'player') {
+    return (
+      <div className="fade-up">
+        <button className="btn btn-ghost btn-sm" onClick={() => setView('home')} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <ChevronLeft size={16} /> Retour aux Podcasts
+        </button>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+          <div className="glass" style={{ padding: '3rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
+            <div style={{ width: '250px', height: '250px', background: 'linear-gradient(45deg, #8b5cf6, #ec4899)', borderRadius: '24px', marginBottom: '2rem', boxShadow: '0 20px 40px rgba(139,92,246,0.3)', position: 'relative', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem' }}>🎙️</div>
+            </div>
+            <h2 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Les Grands Débats</h2>
+            <p style={{ color: 'var(--text-sub)', fontSize: '1.1rem', marginBottom: '2rem' }}>Épisode 42 : L'avenir de l'agriculture face aux changements climatiques.</p>
+            
+            <div style={{ width: '100%', marginBottom: '2rem' }}>
+              <div style={{ width: '100%', height: '6px', background: 'rgba(128,128,128,0.2)', borderRadius: '3px', marginBottom: '0.5rem', cursor: 'pointer' }}>
+                <div style={{ width: '35%', height: '100%', background: '#8b5cf6', borderRadius: '3px', position: 'relative' }}>
+                  <div style={{ width: '12px', height: '12px', background: '#fff', borderRadius: '50%', position: 'absolute', right: '-6px', top: '-3px' }}></div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                <span>15:24</span>
+                <span>45:00</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+              <SkipBack size={32} color="var(--text-main)" style={{ cursor: 'pointer', opacity: 0.8 }} />
+              <button onClick={() => setPlaying(!playing)} style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#8b5cf6', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 10px 20px rgba(139,92,246,0.4)' }}>
+                {playing ? <Pause size={32} color="#fff" /> : <Play size={32} color="#fff" style={{ marginLeft: '4px' }} />}
+              </button>
+              <SkipForward size={32} color="var(--text-main)" style={{ cursor: 'pointer', opacity: 0.8 }} />
+            </div>
+          </div>
+
+          <div className="glass" style={{ padding: '2rem', display: 'flex', flexDirection: 'column' }}>
+            <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <FileAudio size={20} color="#8b5cf6" /> Transcription Interactive
+            </h3>
+            <div style={{ flex: 1, overflowY: 'auto', paddingRight: '1rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: 1.6 }}>...précédemment, nous parlions des semences améliorées.</p>
+              <p style={{ color: 'var(--text-main)', fontSize: '1.1rem', lineHeight: 1.6, fontWeight: 600, borderLeft: '3px solid #8b5cf6', paddingLeft: '1rem' }}>
+                <span style={{ color: '#8b5cf6', fontSize: '0.9rem', display: 'block', marginBottom: '0.3rem' }}>15:24 - Ousmane Ndiaye (Expert Agronome)</span>
+                La question de la salinisation des terres dans les Niayes est critique. Si nous ne mettons pas en place des digues de rétention d'ici 2028, nous risquons de perdre 30% des surfaces maraîchères de la région.
+              </p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'block', marginBottom: '0.3rem' }}>15:40 - Journaliste</span>
+                Mais quelles sont les solutions immédiates pour les producteurs locaux qui font face à ce problème aujourd'hui ?
+              </p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: 1.6 }}>
+                <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem', display: 'block', marginBottom: '0.3rem' }}>15:45 - Ousmane Ndiaye</span>
+                L'adaptation passe d'abord par la sélection de variétés résistantes au sel, développées en partenariat avec l'ISRA...
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fade-up">
-      <div className="page-header">
-        <h2>Soleil Audio</h2>
-        <p>Podcasts, journaux parlés et articles en audio — le Sénégal à écouter</p>
+      <div className="page-header" style={{ marginBottom: '2rem' }}>
+        <h2 style={{ color: 'var(--text-main)' }}>Soleil Audio</h2>
+        <p style={{ color: 'var(--text-muted)' }}>Le journal qui s'écoute. Podcasts et Text-to-Speech natif.</p>
       </div>
 
-      {/* TTS Banner */}
-      <div className="tts-banner glass" style={{ padding: '1.5rem 2rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-        <div style={{ fontSize: '2.5rem' }}>🗣️</div>
-        <div style={{ flex: 1 }}>
-          <h3 style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>Lecture Audio des Articles (Text-to-Speech)</h3>
-          <p style={{ fontSize: '0.88rem' }}>Tous les articles du Soleil sont disponibles en audio, en Français et en Wolof. Activez la lecture vocale sur n'importe quel article.</p>
+      <div className="tts-banner glass" style={{ padding: '2rem', background: 'linear-gradient(90deg, rgba(139,92,246,0.1), rgba(0,0,0,0))', borderLeft: '4px solid #8b5cf6', marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h3 style={{ fontSize: '1.4rem', marginBottom: '0.5rem', color: 'var(--text-main)' }}>Lecture Vocale (IA)</h3>
+          <p style={{ color: 'var(--text-sub)' }}>Tous les articles du Soleil sont désormais disponibles en audio, lus par notre voix de synthèse neutre ou en Wolof.</p>
         </div>
-        <button className="btn btn-primary"><Headphones size={18} /> Essayer</button>
+        <button className="btn btn-primary" style={{ background: '#8b5cf6', color: '#fff', border: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Play size={18} /> Essayer sur un article
+        </button>
       </div>
 
-      {/* Player */}
-      {playing && (
-        <div className="audio-player glass" style={{ marginBottom: '2rem' }}>
-          <div className="audio-player-art">{playing.podcast === 'Journal Parlé' ? '🌅' : '🔍'}</div>
-          <div className="audio-player-info">
-            <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>{playing.title}</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{playing.podcast}</div>
+      <h3 style={{ fontSize: '1.3rem', marginBottom: '1.5rem', color: 'var(--text-main)' }}>Podcasts Originaux</h3>
+      <div className="podcast-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
+        
+        <div className="podcast-card glass" style={{ padding: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', cursor: 'pointer' }} onClick={() => setView('player')}>
+          <div style={{ width: '80px', height: '80px', background: 'linear-gradient(45deg, #8b5cf6, #ec4899)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', flexShrink: 0 }}>
+            🎙️
           </div>
-          <div style={{ flex: 1, padding: '0 1.5rem' }}>
-            <div className="audio-progress">
-              <div className="audio-progress-fill" style={{ width: `${progress}%` }} />
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.3rem' }}>
-              <span className="audio-time">3:38</span>
-              <span className="audio-time">{playing.dur}</span>
-            </div>
+          <div>
+            <h4 style={{ fontSize: '1.1rem', marginBottom: '0.3rem', color: 'var(--text-main)' }}>Les Grands Débats</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Épisode 42 • 45 min</p>
           </div>
-          <div className="audio-controls">
-            <button className="btn btn-ghost btn-sm" style={{ padding: '0.4rem' }}><SkipBack size={18} /></button>
-            <button className="btn btn-primary" style={{ padding: '0.6rem', borderRadius: '50%' }} onClick={() => setPlaying(null)}><Pause size={20} /></button>
-            <button className="btn btn-ghost btn-sm" style={{ padding: '0.4rem' }}><SkipForward size={18} /></button>
-          </div>
-          <Volume2 size={18} style={{ color: 'var(--text-muted)' }} />
         </div>
-      )}
 
-      {/* Podcasts */}
-      <div className="section-header"><h3>Nos Podcasts</h3></div>
-      <div className="podcast-grid" style={{ marginBottom: '2.5rem' }}>
-        {PODCASTS.map(p => (
-          <div className="podcast-card glass" key={p.id}>
-            <div className="podcast-cover">
-              <span style={{ fontSize: '3rem' }}>{p.emoji}</span>
-              <div style={{ position: 'absolute', bottom: '0.8rem', right: '0.8rem', background: 'rgba(0,0,0,0.6)', padding: '0.2rem 0.6rem', borderRadius: '8px', fontSize: '0.75rem' }}>
-                {p.episodes} épisodes
-              </div>
-            </div>
-            <div style={{ padding: '1.2rem' }}>
-              <h3 style={{ fontSize: '1rem', marginBottom: '0.3rem' }}>{p.title}</h3>
-              <p style={{ fontSize: '0.85rem', marginBottom: '0.5rem' }}>{p.desc}</p>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{p.cat} • {p.dur}</span>
-                <Mic size={14} style={{ color: 'var(--primary)' }} />
-              </div>
-            </div>
+        <div className="podcast-card glass" style={{ padding: '1rem', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+          <div style={{ width: '80px', height: '80px', background: 'linear-gradient(45deg, #10b981, #3b82f6)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem', flexShrink: 0 }}>
+            🌍
           </div>
-        ))}
-      </div>
+          <div>
+            <h4 style={{ fontSize: '1.1rem', marginBottom: '0.3rem', color: 'var(--text-main)' }}>Le Monde en Face</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Épisode 18 • 30 min</p>
+          </div>
+        </div>
 
-      {/* Episodes */}
-      <div className="section-header"><h3>Derniers Épisodes</h3></div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        {EPISODES.map(ep => (
-          <div key={ep.id} className="news-card" onClick={() => setPlaying(ep)} style={{ cursor: 'pointer' }}>
-            <div className="news-thumb" style={{ width: '60px', minWidth: '60px', height: '60px', borderRadius: '12px', fontSize: '1.2rem' }}>
-              <Play size={20} style={{ color: 'var(--primary)' }} />
-            </div>
-            <div style={{ flex: 1 }}>
-              <div style={{ fontSize: '0.78rem', color: 'var(--primary)', marginBottom: '0.3rem' }}>{ep.podcast}</div>
-              <h3 style={{ fontSize: '0.95rem', marginBottom: '0.2rem' }}>{ep.title}</h3>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{ep.date} • {ep.dur}</div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
