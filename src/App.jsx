@@ -276,7 +276,14 @@ export default function App() {
       {/* Main */}
       <div className="main">
         <header className="topbar">
-          <span className="topbar-title">{TITLES[tab]}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {tab !== 'home' && (
+              <button className="btn btn-ghost btn-sm" onClick={() => navigate('home')} style={{ padding: '0.4rem', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }}>
+                <ChevronLeft size={20} />
+              </button>
+            )}
+            <span className="topbar-title">{TITLES[tab]}</span>
+          </div>
           <div className="topbar-meta">
             <div className="live-chip"><div className="live-dot" />LIVE</div>
             <Bell size={20} style={{ color: 'var(--text-muted)', cursor: 'pointer' }} />
