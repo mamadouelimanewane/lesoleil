@@ -199,7 +199,7 @@ function App() {
               </span>
             </div>
             
-            <div style={{width: '100%', height: '400px', background: '#000', borderRadius: '12px', marginTop: '1rem', position: 'relative', display: 'flex', alignItems: 'center', justify-content: 'center'}}>
+            <div style={{width: '100%', height: '400px', background: '#000', borderRadius: '12px', marginTop: '1rem', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                <Play size={64} style={{color: 'rgba(255,255,255,0.5)', cursor: 'pointer'}} />
                <div style={{position: 'absolute', bottom: '1rem', left: '1rem', color: 'white', fontWeight: 'bold'}}>Journal de 20H</div>
             </div>
