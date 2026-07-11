@@ -2,9 +2,17 @@ import React, { useState } from 'react';
 import {
   Newspaper, Archive, MonitorPlay, Users, BookOpen,
   Sun, Search, Play, Send, ChevronLeft, TrendingUp,
-  Globe, Bell, Menu, X, ArrowRight, Zap, Star
+  Globe, Bell, Menu, X, ArrowRight, Zap, Star,
+  Gamepad2, Mail, Headphones, Briefcase, Calendar, Sparkles
 } from 'lucide-react';
 import './App.css';
+
+import JeuxPage from './JeuxPage';
+import BriefingPage from './BriefingPage';
+import AudioPage from './AudioPage';
+import ProPage from './ProPage';
+import EventsPage from './EventsPage';
+import IAPage from './IAPage';
 
 /* =======================================
    DATA
@@ -75,14 +83,14 @@ function HomePage({ setTab }) {
       <div className="hero">
         <div className="hero-tag"><Zap size={14} /> Transformation Numérique</div>
         <h1>Le Soleil entre dans <span>l'ère digitale</span></h1>
-        <p>Découvrez les 5 prototypes d'applications innovantes conçues pour moderniser le premier quotidien du Sénégal.</p>
+        <p>Découvrez les 11 prototypes d'applications innovantes conçues pour moderniser le premier quotidien du Sénégal.</p>
         <div className="hero-actions">
           <button className="btn btn-primary" onClick={() => setTab('news')}><Newspaper size={18} /> Explorer les Apps</button>
           <button className="btn btn-ghost"><Globe size={18} /> lesoleil.sn</button>
         </div>
         <div className="hero-stats">
           <div className="stat-item"><div className="stat-number">54</div><div className="stat-label">Années d'histoire</div></div>
-          <div className="stat-item"><div className="stat-number">5</div><div className="stat-label">Applications prévues</div></div>
+          <div className="stat-item"><div className="stat-number">11</div><div className="stat-label">Applications prévues</div></div>
           <div className="stat-item"><div className="stat-number">2M+</div><div className="stat-label">Lecteurs potentiels</div></div>
           <div className="stat-item"><div className="stat-number">1970</div><div className="stat-label">Fondation</div></div>
         </div>
@@ -91,10 +99,16 @@ function HomePage({ setTab }) {
       {/* Apps Grid */}
       <div className="section-header">
         <h2>Applications Proposées</h2>
-        <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>5 concepts, 1 vision</span>
+        <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>11 concepts, 1 vision</span>
       </div>
       <div className="apps-grid">
         {[
+          { id: 'jeux', icon: '🎮', color: '#10b981', label: 'Soleil Jeux', desc: 'Le Wordle en Wolof et quiz quotidiens. Crée une habitude.' },
+          { id: 'briefing', icon: '📧', color: '#f59e0b', label: 'Soleil Briefing', desc: 'Newsletters spécialisées pour la diaspora et professionnels.' },
+          { id: 'audio', icon: '🎧', color: '#8b5cf6', label: 'Soleil Audio', desc: 'Podcasts et text-to-speech pour une audience orale.' },
+          { id: 'pro', icon: '💼', color: '#3b82f6', label: 'Soleil Pro / B2B', desc: 'Données économiques et marchés publics pour entreprises.' },
+          { id: 'events', icon: '🎟️', color: '#ec4899', label: 'Le Soleil Events', desc: 'Forums, masterclasses et événements communautaires.' },
+          { id: 'ia', icon: '🤖', color: '#06b6d4', label: 'Soleil IA', desc: 'Assistant intelligent pour interagir avec les archives.' },
           { id: 'news', icon: '📰', color: '#8b5cf6', label: 'Le Soleil News', desc: 'Fil d\'actualité temps réel, alertes push, mode hors-ligne.' },
           { id: 'archives', icon: '📚', color: '#f59e0b', label: 'Soleil Archives', desc: 'Recherche IA dans 54 ans d\'histoire du Sénégal.' },
           { id: 'premium', icon: '💎', color: '#10b981', label: 'Soleil Premium', desc: 'E-paper quotidien, abonnement, paiement Orange Money & Wave.' },
@@ -427,6 +441,12 @@ function TVPage() {
    ======================================= */
 const TABS = [
   { id: 'home',    label: 'Vue d\'ensemble',  icon: Sun,        badge: null },
+  { id: 'jeux',    label: 'Soleil Jeux',      icon: Gamepad2,   badge: 'Nouveau' },
+  { id: 'briefing',label: 'Soleil Briefing',  icon: Mail,       badge: null },
+  { id: 'audio',   label: 'Soleil Audio',     icon: Headphones, badge: null },
+  { id: 'pro',     label: 'Soleil Pro / B2B', icon: Briefcase,  badge: null },
+  { id: 'events',  label: 'Le Soleil Events', icon: Calendar,   badge: null },
+  { id: 'ia',      label: 'Soleil IA',        icon: Sparkles,   badge: 'Beta' },
   { id: 'news',    label: 'Le Soleil News',   icon: Newspaper,  badge: '4' },
   { id: 'archives',label: 'Soleil Archives',  icon: Archive,    badge: null },
   { id: 'premium', label: 'Soleil Premium',   icon: BookOpen,   badge: null },
@@ -437,6 +457,8 @@ const TABS = [
 const TITLES = {
   home: 'Accueil', news: 'Le Soleil News', archives: 'Soleil Archives',
   premium: 'Soleil Premium', connect: 'Soleil Connect', tv: 'Soleil TV+',
+  jeux: 'Soleil Jeux', briefing: 'Soleil Briefing', audio: 'Soleil Audio',
+  pro: 'Soleil Pro / B2B', events: 'Le Soleil Events', ia: 'Soleil IA'
 };
 
 export default function App() {
@@ -465,20 +487,37 @@ export default function App() {
           </div>
         </div>
 
-        <span className="nav-section-label">Applications</span>
-        {TABS.map(t => {
-          const Icon = t.icon;
-          return (
-            <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)}>
-              <Icon size={19} />
-              {t.label}
-              {t.badge && <span className="nav-badge">{t.badge}</span>}
-            </button>
-          );
-        })}
+        <div style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
+          <span className="nav-section-label">Général</span>
+          <button className={`nav-item ${tab === 'home' ? 'active' : ''}`} onClick={() => navigate('home')}>
+            <Sun size={19} /> Vue d'ensemble
+          </button>
+          
+          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Nouvelles Sources (2026)</span>
+          {TABS.slice(1, 7).map(t => {
+            const Icon = t.icon;
+            return (
+              <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)}>
+                <Icon size={19} /> {t.label}
+                {t.badge && <span className="nav-badge" style={{ background: t.id === 'jeux' ? 'var(--success)' : (t.id === 'ia' ? 'var(--accent)' : 'var(--danger)') }}>{t.badge}</span>}
+              </button>
+            );
+          })}
+
+          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Médias & Plateformes</span>
+          {TABS.slice(7).map(t => {
+            const Icon = t.icon;
+            return (
+              <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)}>
+                <Icon size={19} /> {t.label}
+                {t.badge && <span className="nav-badge">{t.badge}</span>}
+              </button>
+            );
+          })}
+        </div>
 
         <div style={{ marginTop: 'auto', padding: '1rem 0.8rem', borderTop: '1px solid var(--border)' }}>
-          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>© 2026 Le Soleil — SSPP<br />Prototypes digitaux v1.0</p>
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>© 2026 Le Soleil — SSPP<br />Prototypes digitaux v2.0</p>
         </div>
       </aside>
 
@@ -499,6 +538,12 @@ export default function App() {
           {tab === 'premium'  && <PremiumPage />}
           {tab === 'connect'  && <ConnectPage />}
           {tab === 'tv'       && <TVPage />}
+          {tab === 'jeux'     && <JeuxPage />}
+          {tab === 'briefing' && <BriefingPage />}
+          {tab === 'audio'    && <AudioPage />}
+          {tab === 'pro'      && <ProPage />}
+          {tab === 'events'   && <EventsPage />}
+          {tab === 'ia'       && <IAPage />}
         </div>
       </div>
     </div>
