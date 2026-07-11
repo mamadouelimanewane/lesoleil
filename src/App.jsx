@@ -3,7 +3,8 @@ import {
   Newspaper, Archive, MonitorPlay, Users, BookOpen,
   Sun, Search, Play, Send, ChevronLeft, TrendingUp,
   Globe, Bell, Menu, X, ArrowRight, Zap, Star,
-  Gamepad2, Mail, Headphones, Briefcase, Calendar, Sparkles
+  Gamepad2, Mail, Headphones, Briefcase, Calendar, Sparkles,
+  Database, Shield, GraduationCap, Wifi, Check
 } from 'lucide-react';
 import './App.css';
 
@@ -13,459 +14,203 @@ import AudioPage from './AudioPage';
 import ProPage from './ProPage';
 import EventsPage from './EventsPage';
 import IAPage from './IAPage';
+import MemoirePage from './MemoirePage';
+import ExecutifPage from './ExecutifPage';
+import EducationPage from './EducationPage';
+import ZeroDataPage from './ZeroDataPage';
 
 /* =======================================
    DATA
    ======================================= */
 const NEWS = [
-  {
-    id: 1, time: 'Il y a 30 min', category: 'Politique', emoji: '🏛️',
-    title: 'Le gouvernement annonce un ambitieux plan de relance économique pour 2028',
-    excerpt: 'Un programme de 500 milliards de FCFA visant à booster les secteurs de l\'agriculture, du numérique et des infrastructures a été dévoilé ce matin.',
-    body: 'Le Premier Ministre a présenté ce matin en Conseil des Ministres un plan de relance économique sans précédent. Ce programme ambitieux mobilisera 500 milliards de FCFA sur trois ans, principalement orientés vers l\'agriculture (40%), les technologies numériques (30%) et les infrastructures routières et portuaires (30%). "Notre ambition est de positionner le Sénégal comme le hub économique de l\'Afrique de l\'Ouest", a déclaré le Premier Ministre...',
-  },
-  {
-    id: 2, time: 'Il y a 2h', category: 'Sport', emoji: '⚽',
-    title: 'Les Lions de la Téranga en camp d\'entraînement intensif à Saly avant le tournoi continental',
-    excerpt: 'L\'équipe nationale de football est en pleine préparation à Saly Portudal. 26 joueurs convoqués pour cet important rassemblement.',
-    body: 'Le sélectionneur national a réuni 26 joueurs dans le complexe sportif de Saly pour une préparation intensive avant la prochaine CAN. La liste comprend plusieurs nouvelles têtes issues du championnat local, ainsi que les habituels cadres évoluant en Europe. Les séances s\'enchaînent matin et soir, et l\'ambiance au sein du groupe est décrite comme excellente par le staff technique...',
-  },
-  {
-    id: 3, time: 'Il y a 4h', category: 'Société', emoji: '🌿',
-    title: 'Dakar Propre : Des centaines de jeunes mobilisés pour le grand nettoyage de la capitale',
-    excerpt: 'À l\'initiative d\'une coalition d\'associations, plus de 500 bénévoles ont ratissé plusieurs quartiers de Dakar ce week-end.',
-    body: 'L\'opération "Dakar Propre" a rassemblé ce samedi plus de 500 jeunes bénévoles venus de tous les quartiers de la capitale. Organisée conjointement par plusieurs associations citoyennes et soutenue par la mairie de Dakar, cette initiative vise à sensibiliser les populations sur la gestion des déchets et à redonner un visage propre à la ville. Des camions de ramassage ont été mis à disposition par la municipalité...',
-  },
-  {
-    id: 4, time: 'Il y a 6h', category: 'Économie', emoji: '📈',
-    title: 'La production pétrolière du Sénégal atteint un nouveau record au premier semestre',
-    excerpt: 'Les chiffres publiés par le ministère de l\'Énergie confirment une progression de 18% par rapport à l\'année précédente.',
-    body: 'Le secteur pétrolier sénégalais affiche de nouvelles performances au premier semestre 2026. Selon les données publiées par le ministère de l\'Énergie et des Hydrocarbures, la production a bondi de 18% sur un an, portée principalement par les champs offshore de Sangomar et Yaakar-Teranga...',
-  },
+  { id: 1, time: 'Il y a 30 min', category: 'Politique', emoji: '🏛️', title: 'Le gouvernement annonce un ambitieux plan de relance économique pour 2028', excerpt: 'Un programme de 500 milliards de FCFA...', body: '...' },
+  { id: 2, time: 'Il y a 2h', category: 'Sport', emoji: '⚽', title: 'Les Lions de la Téranga en camp d\'entraînement intensif à Saly', excerpt: 'L\'équipe nationale de football est en pleine préparation...', body: '...' },
 ];
+const ARCHIVES = [ { year: 1970, title: 'Naissance du Soleil', desc: 'Le premier numéro paraît sous l\'impulsion du Président Léopold Sédar Senghor.' } ];
+const VIDEOS = [ { id: 1, emoji: '🎬', title: 'Le Sénégal de Demain : Enquête sur le pétrole', cat: 'Enquête', dur: '48 min' } ];
 
-const ARCHIVES = [
-  { year: 1970, title: 'Naissance du Soleil', desc: 'Le premier numéro paraît sous l\'impulsion du Président Léopold Sédar Senghor.' },
-  { year: 1981, title: 'L\'Alternance Historique', desc: 'Couverture de la première transition pacifique du pouvoir au Sénégal.' },
-  { year: 1994, title: 'La Dévaluation du FCFA', desc: 'Les pages économiques qui ont marqué toute une génération.' },
-  { year: 2000, title: 'L\'Alternance de 2000', desc: 'La victoire historique d\'Abdoulaye Wade et le début d\'une nouvelle ère.' },
-  { year: 2002, title: 'La Tragédie du Joola', desc: 'Couverture du naufrage qui a endeuillé tout le pays.' },
-  { year: 2012, title: 'Les Élections de 2012', desc: 'Macky Sall remporte la présidentielle : retour sur une campagne historique.' },
-];
-
-const VIDEOS = [
-  { id: 1, emoji: '🎬', title: 'Le Sénégal de Demain : Enquête sur le pétrole', cat: 'Enquête', dur: '48 min' },
-  { id: 2, emoji: '🌍', title: 'Diaspora Sénégalaise : Quel avenir pour nos talents à l\'étranger ?', cat: 'Documentaire', dur: '32 min' },
-  { id: 3, emoji: '🏆', title: 'L\'épopée de l\'équipe nationale : retour sur 20 ans de football', cat: 'Sport', dur: '55 min' },
-  { id: 4, emoji: '🎭', title: 'Culture & Tradition : Le Sabar, danse de l\'âme sénégalaise', cat: 'Culture', dur: '24 min' },
-  { id: 5, emoji: '📊', title: 'Grand débat économique : Réforme fiscale au Sénégal', cat: 'Débat', dur: '1h 10 min' },
-  { id: 6, emoji: '🌊', title: 'Environnement : La montée des eaux menace le littoral dakarois', cat: 'Enquête', dur: '39 min' },
-];
-
-/* =======================================
-   CATEGORY CHIP
-   ======================================= */
 function CategoryChip({ cat }) {
-  const map = {
-    Politique: 'chip-politique', Sport: 'chip-sport',
-    Société: 'chip-societe', Économie: 'chip-economie', Culture: 'chip-culture',
-  };
+  const map = { Politique: 'chip-politique', Sport: 'chip-sport', Société: 'chip-societe', Économie: 'chip-economie', Culture: 'chip-culture' };
   return <span className={`category-chip ${map[cat] || 'chip-societe'}`}>{cat}</span>;
 }
 
 /* =======================================
-   HOME PAGE
+   PITCH LANDING PAGE (Format Hospice-Seven)
    ======================================= */
 function HomePage({ setTab }) {
-  return (
-    <div className="fade-up">
-      {/* Hero */}
-      <div className="hero">
-        <div className="hero-tag"><Zap size={14} /> Transformation Numérique</div>
-        <h1>Le Soleil entre dans <span>l'ère digitale</span></h1>
-        <p>Découvrez les 11 prototypes d'applications innovantes conçues pour moderniser le premier quotidien du Sénégal.</p>
-        <div className="hero-actions">
-          <button className="btn btn-primary" onClick={() => setTab('news')}><Newspaper size={18} /> Explorer les Apps</button>
-          <button className="btn btn-ghost"><Globe size={18} /> lesoleil.sn</button>
-        </div>
-        <div className="hero-stats">
-          <div className="stat-item"><div className="stat-number">54</div><div className="stat-label">Années d'histoire</div></div>
-          <div className="stat-item"><div className="stat-number">11</div><div className="stat-label">Applications prévues</div></div>
-          <div className="stat-item"><div className="stat-number">2M+</div><div className="stat-label">Lecteurs potentiels</div></div>
-          <div className="stat-item"><div className="stat-number">1970</div><div className="stat-label">Fondation</div></div>
-        </div>
-      </div>
+  const categories = [
+    {
+      step: "1 / 3",
+      count: 4,
+      title: "Projets d'État & Souveraineté",
+      desc: "Arguments majeurs pour le Gouvernement et les Bailleurs de Fonds",
+      apps: [
+        { id: 'memoire', icon: '🏛️', color: '#f59e0b', label: 'Mémoire de la Nation', desc: 'Numérisation IA de 54 ans d\'archives (UNESCO)' },
+        { id: 'executif', icon: '💼', color: '#ef4444', label: 'Soleil Exécutif', desc: 'Portail B2G ultra-sécurisé pour la Présidence' },
+        { id: 'education', icon: '🎓', color: '#8b5cf6', label: 'Soleil Éducation', desc: 'EdTech : Le Soleil dans les collèges et lycées' },
+        { id: 'zerodata', icon: '📶', color: '#10b981', label: 'Zéro Data Telco', desc: 'Partenariat d\'accès gratuit sans forfait internet' },
+      ]
+    },
+    {
+      step: "2 / 3",
+      count: 6,
+      title: "Nouveaux Moteurs de Croissance",
+      desc: "Monétisation, engagement et fidélisation des audiences (Business Plan 2026)",
+      apps: [
+        { id: 'jeux', icon: '🎮', color: '#10b981', label: 'Soleil Jeux', desc: 'Wordle Wolof et quiz. Crée une habitude.' },
+        { id: 'briefing', icon: '📧', color: '#f59e0b', label: 'Soleil Briefing', desc: 'Newsletters payantes (Éco, Diaspora, Sport)' },
+        { id: 'audio', icon: '🎧', color: '#8b5cf6', label: 'Soleil Audio', desc: 'Podcasts et Lecture Vocale (Text-to-Speech)' },
+        { id: 'pro', icon: '📈', color: '#3b82f6', label: 'Soleil Pro / B2B', desc: 'Data marchés publics et rapports sectoriels' },
+        { id: 'events', icon: '🎟️', color: '#ec4899', label: 'Le Soleil Events', desc: 'Organisation de Forums et Masterclasses' },
+        { id: 'ia', icon: '🤖', color: '#06b6d4', label: 'Soleil IA', desc: 'Assistant IA interactif branché sur les archives' },
+      ]
+    },
+    {
+      step: "3 / 3",
+      count: 5,
+      title: "Plateformes Médias Historiques",
+      desc: "Modernisation des canaux de distribution classiques",
+      apps: [
+        { id: 'news', icon: '📰', color: '#3b82f6', label: 'Le Soleil News', desc: 'Fil d\'actualité temps réel et alertes' },
+        { id: 'archives', icon: '📚', color: '#f59e0b', label: 'Soleil Archives', desc: 'Recherche plein texte dans le patrimoine' },
+        { id: 'premium', icon: '💎', color: '#10b981', label: 'Soleil Premium', desc: 'E-paper et abonnements (Orange Money/Wave)' },
+        { id: 'connect', icon: '🎙️', color: '#ef4444', label: 'Soleil Connect', desc: 'Réseau de correspondants citoyens' },
+        { id: 'tv', icon: '📺', color: '#1e88e5', label: 'Soleil TV+', desc: 'Web TV, documentaires et replays' },
+      ]
+    }
+  ];
 
-      {/* Apps Grid */}
-      <div className="section-header">
-        <h2>Applications Proposées</h2>
-        <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>11 concepts, 1 vision</span>
-      </div>
-      <div className="apps-grid">
-        {[
-          { id: 'jeux', icon: '🎮', color: '#10b981', label: 'Soleil Jeux', desc: 'Le Wordle en Wolof et quiz quotidiens. Crée une habitude.' },
-          { id: 'briefing', icon: '📧', color: '#f59e0b', label: 'Soleil Briefing', desc: 'Newsletters spécialisées pour la diaspora et professionnels.' },
-          { id: 'audio', icon: '🎧', color: '#8b5cf6', label: 'Soleil Audio', desc: 'Podcasts et text-to-speech pour une audience orale.' },
-          { id: 'pro', icon: '💼', color: '#3b82f6', label: 'Soleil Pro / B2B', desc: 'Données économiques et marchés publics pour entreprises.' },
-          { id: 'events', icon: '🎟️', color: '#ec4899', label: 'Le Soleil Events', desc: 'Forums, masterclasses et événements communautaires.' },
-          { id: 'ia', icon: '🤖', color: '#06b6d4', label: 'Soleil IA', desc: 'Assistant intelligent pour interagir avec les archives.' },
-          { id: 'news', icon: '📰', color: '#8b5cf6', label: 'Le Soleil News', desc: 'Fil d\'actualité temps réel, alertes push, mode hors-ligne.' },
-          { id: 'archives', icon: '📚', color: '#f59e0b', label: 'Soleil Archives', desc: 'Recherche IA dans 54 ans d\'histoire du Sénégal.' },
-          { id: 'premium', icon: '💎', color: '#10b981', label: 'Soleil Premium', desc: 'E-paper quotidien, abonnement, paiement Orange Money & Wave.' },
-          { id: 'connect', icon: '🎙️', color: '#ef4444', label: 'Soleil Connect', desc: 'Journalisme citoyen, signalements, vérification par la rédaction.' },
-          { id: 'tv', icon: '📺', color: '#1e88e5', label: 'Soleil TV+', desc: 'Streaming live, VOD, documentaires et grands débats.' },
-        ].map(app => (
-          <div className="app-card" key={app.id} onClick={() => setTab(app.id)}>
-            <div className="app-icon" style={{ background: `${app.color}22`, color: app.color }}>{app.icon}</div>
-            <div>
-              <div className="app-card-title">{app.label}</div>
-              <p style={{ fontSize: '0.88rem', marginTop: '0.4rem' }}>{app.desc}</p>
-            </div>
-            <div className="app-card-arrow">Voir le prototype <ArrowRight size={14} /></div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* =======================================
-   NEWS PAGE
-   ======================================= */
-function NewsPage() {
-  const [selected, setSelected] = useState(null);
   return (
-    <div className="fade-up">
-      {selected ? (
-        <>
-          <button className="btn btn-ghost btn-sm" onClick={() => setSelected(null)} style={{ marginBottom: '1.5rem' }}>
-            <ChevronLeft size={16} /> Retour au fil
-          </button>
-          <div className="article-view glass" style={{ padding: '2rem' }}>
-            <CategoryChip cat={selected.category} />
-            <div className="article-hero-img" style={{ marginTop: '1rem' }}>{selected.emoji}</div>
-            <h1>{selected.title}</h1>
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', margin: '1rem 0', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
-              <span>Par la rédaction du Soleil</span>
-              <span>•</span>
-              <span>{selected.time}</span>
-            </div>
-            <div className="article-body">
-              <p>{selected.body}</p>
-              <p>Des experts contactés par notre rédaction saluent cette initiative tout en appelant à plus de transparence dans sa mise en oeuvre. Le suivi de ce dossier sera assuré par notre équipe d'investigation dans les prochains jours.</p>
-            </div>
+    <div style={{ paddingBottom: '4rem' }}>
+      {/* Hero Section (Pitch) */}
+      <section style={{ textAlign: 'center', padding: '3rem 1rem 4rem', position: 'relative' }}>
+        <div className="au1" style={{ display: 'inline-flex', marginBottom: '1.5rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '100px', padding: '6px 18px' }}>
+            <span style={{ fontSize: '13px' }}>🇸🇳</span>
+            <span style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>République du Sénégal · Souveraineté Numérique</span>
           </div>
-        </>
-      ) : (
-        <>
-          <div className="page-header">
-            <h2>Le Soleil News</h2>
-            <p>Actualités en direct — mise à jour en temps réel depuis la rédaction</p>
-          </div>
-          <div className="news-list">
-            {NEWS.map(n => (
-              <div className="news-card" key={n.id} onClick={() => setSelected(n)}>
-                <div className="news-thumb">{n.emoji}</div>
-                <div className="news-card-body">
-                  <CategoryChip cat={n.category} />
-                  <h3>{n.title}</h3>
-                  <p>{n.excerpt}</p>
-                  <div className="news-time">{n.time}</div>
+        </div>
+        <div className="au2" style={{ marginBottom: '1.5rem' }}>
+          <h1 style={{ fontSize: 'clamp(2.2rem, 5vw, 4rem)', fontWeight: 800, lineHeight: 1.1, letterSpacing: '-0.02em' }}>
+            <span style={{ display: 'block', fontSize: '0.42em', fontWeight: 500, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '0.7rem' }}>L'Écosystème Digital</span>
+            <span style={{ background: 'linear-gradient(135deg, #fff 0%, #fef3c7 50%, #f59e0b 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Quotidien Le Soleil</span>
+          </h1>
+        </div>
+        <p className="au3" style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.3rem)', fontWeight: 600, color: 'rgba(255,255,255,0.75)', maxWidth: '680px', margin: '0 auto 2.5rem', lineHeight: 1.7 }}>
+          Informer. <span style={{ color: '#f59e0b' }}>Innover.</span> Préserver la mémoire de la Nation.
+        </p>
+        
+        <div className="au5 glass" style={{ maxWidth: '800px', margin: '3.5rem auto 0', padding: '2rem 2.5rem', textAlign: 'left', borderLeft: '4px solid #f59e0b' }}>
+          <p style={{ fontSize: '12px', color: '#f59e0b', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '12px' }}>Notre Proposition de Valeur</p>
+          <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.8 }}>
+            Bien plus qu'un site web, ceci est une infrastructure numérique d'État. Ce prototype démontre comment <strong>Le Soleil</strong> peut devenir un hub éducatif, un outil pour le Gouvernement (B2G), et atteindre 5 millions de citoyens ruraux grâce au Zéro Data.
+          </p>
+        </div>
+      </section>
+
+      {/* Applications Directory (Hospice-Seven format) */}
+      <section id="applications" style={{ maxWidth: '1300px', margin: '0 auto', padding: '0 1.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <p style={{ fontSize: '12px', color: '#f59e0b', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '8px' }}>— Portail des Prototypes —</p>
+          <h2 style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)', fontWeight: 800, color: '#fff' }}>15 Applications Stratégiques</h2>
+          <p style={{ fontSize: '16px', color: 'rgba(255,255,255,0.45)', marginTop: '8px' }}>Naviguez dans les différents modules métiers développés pour l'écosystème</p>
+        </div>
+
+        {categories.map((cat, idx) => (
+          <div key={idx} style={{ marginBottom: '3.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '1.5rem', paddingBottom: '14px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px' }}>
+                {idx === 0 ? '🏛️' : idx === 1 ? '🚀' : '📰'}
+              </div>
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ fontSize: '11px', color: '#f59e0b', fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>Étape {cat.step}</span>
+                  <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'inline-block' }}></span>
+                  <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.3)', fontWeight: 600 }}>{cat.count} applications</span>
                 </div>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-}
-
-/* =======================================
-   ARCHIVES PAGE
-   ======================================= */
-function ArchivesPage() {
-  const [q, setQ] = useState('');
-  const filtered = ARCHIVES.filter(a =>
-    a.year.toString().includes(q) || a.title.toLowerCase().includes(q.toLowerCase()) || a.desc.toLowerCase().includes(q.toLowerCase())
-  );
-  return (
-    <div className="fade-up">
-      <div className="page-header">
-        <h2>Soleil Archives</h2>
-        <p>54 ans d'histoire sénégalaise numérisée et consultable en un clic</p>
-      </div>
-      <div className="search-wrap">
-        <div className="search-input-wrap">
-          <Search size={18} />
-          <input className="search-input" type="text" placeholder="Recherchez une année, un événement, un nom..." value={q} onChange={e => setQ(e.target.value)} />
-        </div>
-        <button className="btn btn-primary"><Search size={16} /> Chercher</button>
-      </div>
-      {filtered.length === 0 ? (
-        <p>Aucune archive pour "{q}".</p>
-      ) : (
-        <div className="archives-grid">
-          {filtered.map(a => (
-            <div className="archive-card" key={a.year}>
-              <div className="archive-cover">
-                <div className="archive-cover-lines" />
-                <div className="archive-cover-year">{a.year}</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.4)', position: 'relative', zIndex: 1 }}>Le Soleil</div>
-              </div>
-              <div className="archive-info">
-                <h3>{a.title}</h3>
-                <p style={{ marginTop: '0.4rem' }}>{a.desc}</p>
-                <button className="btn btn-ghost btn-sm btn-full" style={{ marginTop: '1rem' }}>Consulter le PDF</button>
+                <h3 style={{ margin: '2px 0 0', fontSize: 'clamp(1rem, 2vw, 1.25rem)', fontWeight: 800, color: '#fff' }}>{cat.title}</h3>
+                <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255,255,255,0.4)' }}>{cat.desc}</p>
               </div>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
-/* =======================================
-   PREMIUM PAGE
-   ======================================= */
-function PremiumPage() {
-  return (
-    <div className="fade-up">
-      <div className="page-header">
-        <h2>Soleil Premium</h2>
-        <p>Kiosque digital — lisez le journal chaque matin sur tous vos appareils</p>
-      </div>
-      <div className="premium-grid">
-        <div className="pricing-card">
-          <span className="pricing-icon">📄</span>
-          <h3>Édition du Jour</h3>
-          <div className="pricing-price">500 <sub>FCFA</sub></div>
-          <ul className="pricing-features">
-            <li>Journal complet en PDF</li>
-            <li>Suppléments du jour</li>
-            <li>Téléchargement inclus</li>
-          </ul>
-          <div className="payment-methods">
-            <button className="btn btn-orange btn-full">📱 Orange Money</button>
-            <button className="btn btn-wave btn-full">💧 Wave</button>
-            <button className="btn btn-blue btn-full">💳 Carte bancaire</button>
-          </div>
-        </div>
-
-        <div className="pricing-card featured">
-          <div className="badge-featured">⭐ Recommandé</div>
-          <span className="pricing-icon">💎</span>
-          <h3>Abonnement Mensuel</h3>
-          <div className="pricing-price">5 000 <sub>FCFA / mois</sub></div>
-          <ul className="pricing-features">
-            <li>Toutes les éditions du mois</li>
-            <li>Archives des 6 derniers mois</li>
-            <li>Suppléments & hors-séries</li>
-            <li>Sans publicité</li>
-            <li>Lecture hors-ligne</li>
-          </ul>
-          <div className="payment-methods">
-            <button className="btn btn-primary btn-full">S'abonner maintenant</button>
-          </div>
-        </div>
-
-        <div className="pricing-card">
-          <span className="pricing-icon">🏢</span>
-          <h3>Entreprise</h3>
-          <div className="pricing-price" style={{ fontSize: '1.5rem' }}>Sur devis</div>
-          <ul className="pricing-features">
-            <li>Nombre de licences illimité</li>
-            <li>Tableau de bord RH</li>
-            <li>Facturation mensuelle</li>
-            <li>Support dédié</li>
-          </ul>
-          <div className="payment-methods">
-            <button className="btn btn-ghost btn-full">Nous contacter</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* =======================================
-   CONNECT PAGE
-   ======================================= */
-function ConnectPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const handleSubmit = e => { e.preventDefault(); setSubmitted(true); setTimeout(() => setSubmitted(false), 4000); };
-  return (
-    <div className="fade-up">
-      <div className="page-header">
-        <h2>Soleil Connect</h2>
-        <p>Devenez correspondant citoyen — soumettez vos alertes à notre rédaction</p>
-      </div>
-      <div className="connect-grid">
-        {/* Form */}
-        <div>
-          {submitted ? (
-            <div className="success-panel">
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-              <h3>Merci pour votre contribution !</h3>
-              <p>Notre équipe de vérification a reçu votre alerte et l'examinera sous 2 heures.</p>
-            </div>
-          ) : (
-            <form className="glass" style={{ padding: '2rem' }} onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="form-label">Titre de l'information *</label>
-                <input className="form-input" type="text" placeholder="Que se passe-t-il ?" required />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Description détaillée *</label>
-                <textarea className="form-textarea" rows="5" placeholder="Décrivez précisément la situation..." required />
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <div className="form-group">
-                  <label className="form-label">Ville / Quartier *</label>
-                  <input className="form-input" type="text" placeholder="Ex: Dakar, Plateau" required />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+              {cat.apps.map(app => (
+                <div 
+                  key={app.id} 
+                  className="card-hover"
+                  onClick={() => setTab(app.id)}
+                  style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '16px', padding: '1.5rem', position: 'relative', overflow: 'hidden' }}
+                >
+                  <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '2px', background: `linear-gradient(90deg, ${app.color}, transparent)`, opacity: 0.5 }}></div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '12px', flexShrink: 0, fontSize: '22px', background: `${app.color}15`, border: `1px solid ${app.color}30`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {app.icon}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>{app.label}</h3>
+                      <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.5)', lineHeight: 1.5 }}>{app.desc}</p>
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '14px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: app.color, animation: 'pulse-dot 2s infinite' }}></div>
+                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.25)', fontFamily: 'monospace' }}>lesoleil/{app.id}</span>
+                    </div>
+                    <span style={{ fontSize: '13px', fontWeight: 700, color: 'rgba(255,255,255,0.2)' }}>Ouvrir →</span>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label className="form-label">Catégorie</label>
-                  <select className="form-input">
-                    <option>Politique</option>
-                    <option>Société</option>
-                    <option>Économie</option>
-                    <option>Sport</option>
-                    <option>Environnement</option>
-                    <option>Autre</option>
-                  </select>
-                </div>
-              </div>
-              <div className="form-group">
-                <label className="form-label">Photos / Vidéos (optionnel)</label>
-                <div className="file-drop">
-                  <span className="file-drop-icon">📎</span>
-                  <p>Cliquez ou glissez vos fichiers ici</p>
-                  <p style={{ fontSize: '0.8rem', marginTop: '0.3rem' }}>JPG, PNG, MP4 — max 50 Mo</p>
-                </div>
-              </div>
-              <button type="submit" className="btn btn-primary btn-full"><Send size={18} /> Envoyer à la rédaction</button>
-            </form>
-          )}
-        </div>
-
-        {/* Tips */}
-        <div>
-          <h3 style={{ marginBottom: '1.2rem' }}>Comment bien signaler ?</h3>
-          <div className="connect-tips">
-            {[
-              { icon: '🔍', title: 'Soyez précis', text: 'Donnez un maximum de détails : heure, lieu exact, personnes impliquées.' },
-              { icon: '📸', title: 'Ajoutez des preuves', text: 'Photos et vidéos augmentent considérablement la crédibilité de votre alerte.' },
-              { icon: '⚡', title: 'Soyez rapide', text: 'L\'actualité n\'attend pas. Signalez dès que vous êtes en sécurité.' },
-              { icon: '✅', title: 'Vérification', text: 'Notre rédaction vérifiera votre information avant toute publication.' },
-              { icon: '🔒', title: 'Confidentialité', text: 'Votre identité sera protégée si vous le souhaitez.' },
-            ].map(t => (
-              <div className="tip-card" key={t.title}>
-                <span className="tip-icon">{t.icon}</span>
-                <div><h4>{t.title}</h4><p>{t.text}</p></div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* =======================================
-   TV PAGE
-   ======================================= */
-function TVPage() {
-  const [playing, setPlaying] = useState(false);
-  return (
-    <div className="fade-up">
-      <div className="page-header">
-        <h2>Soleil TV+</h2>
-        <p>Streaming direct et VOD — l'actualité en images, sur tous vos écrans</p>
-      </div>
-
-      {/* Live player */}
-      <div className="tv-player">
-        <div className="tv-player-overlay">
-          {!playing ? (
-            <>
-              <div className="play-circle" onClick={() => setPlaying(true)}>
-                <Play size={28} fill="currentColor" />
-              </div>
-              <div className="tv-player-title">📺 Journal de 20H — En direct</div>
-              <div className="tv-player-subtitle">Soleil TV • Dakar</div>
-            </>
-          ) : (
-            <div style={{ color: 'rgba(255,255,255,0.7)', textAlign: 'center' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📡</div>
-              <div>Connexion au flux en cours...</div>
-              <div style={{ fontSize: '0.8rem', marginTop: '0.5rem', color: 'rgba(255,255,255,0.4)' }}>Dans une vraie app, le lecteur HLS/DASH serait ici</div>
-            </div>
-          )}
-        </div>
-        <div className="tv-bar">
-          <div className="live-chip"><div className="live-dot" />DIRECT</div>
-          <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)' }}>Soleil TV — Journal de 20H</span>
-        </div>
-      </div>
-
-      {/* VOD Grid */}
-      <div className="section-header">
-        <h3>Replays & Documentaires</h3>
-      </div>
-      <div className="video-grid">
-        {VIDEOS.map(v => (
-          <div className="video-card" key={v.id}>
-            <div className="video-thumb">
-              <span style={{ fontSize: '3rem' }}>{v.emoji}</span>
-              <div className="video-play">
-                <div className="video-play-btn"><Play size={20} fill="currentColor" /></div>
-              </div>
-              <div className="video-duration">{v.dur}</div>
-            </div>
-            <div className="video-info">
-              <div style={{ marginBottom: '0.4rem' }}><CategoryChip cat={v.cat || 'Culture'} /></div>
-              <h3>{v.title}</h3>
-              <div className="video-meta">Soleil TV • {v.dur}</div>
+              ))}
             </div>
           </div>
         ))}
-      </div>
+      </section>
     </div>
   );
 }
+
+/* =======================================
+   OTHER PLACEHOLDER PAGES
+   ======================================= */
+function NewsPage() { return <div className="fade-up page-header"><h2>Le Soleil News</h2><p>Fil d'actualité temps réel</p></div>; }
+function ArchivesPage() { return <div className="fade-up page-header"><h2>Soleil Archives</h2><p>Moteur de recherche patrimonial</p></div>; }
+function PremiumPage() { return <div className="fade-up page-header"><h2>Soleil Premium</h2><p>Abonnements et e-paper</p></div>; }
+function ConnectPage() { return <div className="fade-up page-header"><h2>Soleil Connect</h2><p>Réseau de correspondants</p></div>; }
+function TVPage() { return <div className="fade-up page-header"><h2>Soleil TV+</h2><p>Web TV en direct</p></div>; }
 
 /* =======================================
    APP SHELL
    ======================================= */
 const TABS = [
-  { id: 'home',    label: 'Vue d\'ensemble',  icon: Sun,        badge: null },
-  { id: 'jeux',    label: 'Soleil Jeux',      icon: Gamepad2,   badge: 'Nouveau' },
-  { id: 'briefing',label: 'Soleil Briefing',  icon: Mail,       badge: null },
-  { id: 'audio',   label: 'Soleil Audio',     icon: Headphones, badge: null },
-  { id: 'pro',     label: 'Soleil Pro / B2B', icon: Briefcase,  badge: null },
-  { id: 'events',  label: 'Le Soleil Events', icon: Calendar,   badge: null },
-  { id: 'ia',      label: 'Soleil IA',        icon: Sparkles,   badge: 'Beta' },
-  { id: 'news',    label: 'Le Soleil News',   icon: Newspaper,  badge: '4' },
-  { id: 'archives',label: 'Soleil Archives',  icon: Archive,    badge: null },
-  { id: 'premium', label: 'Soleil Premium',   icon: BookOpen,   badge: null },
-  { id: 'connect', label: 'Soleil Connect',   icon: Users,      badge: null },
-  { id: 'tv',      label: 'Soleil TV+',       icon: MonitorPlay,badge: 'LIVE' },
+  { id: 'home',      label: 'Pitch & Hub',        icon: Sun,          badge: null },
+  { id: 'memoire',   label: 'Mémoire de la Nation', icon: Database,   badge: 'État' },
+  { id: 'executif',  label: 'Soleil Exécutif',    icon: Shield,       badge: 'VIP' },
+  { id: 'education', label: 'Soleil Éducation',   icon: GraduationCap,badge: 'B2G' },
+  { id: 'zerodata',  label: 'Zéro Data Telco',    icon: Wifi,         badge: 'Tech' },
+  { id: 'jeux',      label: 'Soleil Jeux',        icon: Gamepad2,     badge: 'Nouveau' },
+  { id: 'briefing',  label: 'Soleil Briefing',    icon: Mail,         badge: null },
+  { id: 'audio',     label: 'Soleil Audio',       icon: Headphones,   badge: null },
+  { id: 'pro',       label: 'Soleil Pro / B2B',   icon: Briefcase,    badge: null },
+  { id: 'events',    label: 'Le Soleil Events',   icon: Calendar,     badge: null },
+  { id: 'ia',        label: 'Soleil IA',          icon: Sparkles,     badge: 'Beta' },
+  { id: 'news',      label: 'Le Soleil News',     icon: Newspaper,    badge: null },
+  { id: 'archives',  label: 'Soleil Archives',    icon: Archive,      badge: null },
+  { id: 'premium',   label: 'Soleil Premium',     icon: BookOpen,     badge: null },
+  { id: 'connect',   label: 'Soleil Connect',     icon: Users,        badge: null },
+  { id: 'tv',        label: 'Soleil TV+',         icon: MonitorPlay,  badge: 'LIVE' },
 ];
 
 const TITLES = {
-  home: 'Accueil', news: 'Le Soleil News', archives: 'Soleil Archives',
-  premium: 'Soleil Premium', connect: 'Soleil Connect', tv: 'Soleil TV+',
-  jeux: 'Soleil Jeux', briefing: 'Soleil Briefing', audio: 'Soleil Audio',
-  pro: 'Soleil Pro / B2B', events: 'Le Soleil Events', ia: 'Soleil IA'
+  home: 'Accueil', 
+  memoire: 'Mémoire de la Nation', executif: 'Soleil Exécutif (B2G)', education: 'Soleil Éducation', zerodata: 'Inclusion & Zéro Data',
+  jeux: 'Soleil Jeux', briefing: 'Soleil Briefing', audio: 'Soleil Audio', pro: 'Soleil Pro / B2B', events: 'Le Soleil Events', ia: 'Soleil IA',
+  news: 'Le Soleil News', archives: 'Soleil Archives', premium: 'Soleil Premium', connect: 'Soleil Connect', tv: 'Soleil TV+'
 };
 
 export default function App() {
   const [tab, setTab] = useState('home');
   const [open, setOpen] = useState(false);
 
-  const navigate = (id) => { setTab(id); setOpen(false); };
+  const navigate = (id) => { setTab(id); setOpen(false); window.scrollTo(0, 0); };
 
   return (
     <div className="app-layout">
@@ -490,11 +235,22 @@ export default function App() {
         <div style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
           <span className="nav-section-label">Général</span>
           <button className={`nav-item ${tab === 'home' ? 'active' : ''}`} onClick={() => navigate('home')}>
-            <Sun size={19} /> Vue d'ensemble
+            <Sun size={19} /> Pitch & Hub
           </button>
           
-          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Nouvelles Sources (2026)</span>
-          {TABS.slice(1, 7).map(t => {
+          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Projets d'État & Souveraineté</span>
+          {TABS.slice(1, 5).map(t => {
+            const Icon = t.icon;
+            return (
+              <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)}>
+                <Icon size={19} /> {t.label}
+                {t.badge && <span className="nav-badge" style={{ background: '#ef4444' }}>{t.badge}</span>}
+              </button>
+            );
+          })}
+
+          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Nouveaux Moteurs (2026)</span>
+          {TABS.slice(5, 11).map(t => {
             const Icon = t.icon;
             return (
               <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)}>
@@ -504,8 +260,8 @@ export default function App() {
             );
           })}
 
-          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Médias & Plateformes</span>
-          {TABS.slice(7).map(t => {
+          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Plateformes Historiques</span>
+          {TABS.slice(11).map(t => {
             const Icon = t.icon;
             return (
               <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)}>
@@ -514,10 +270,6 @@ export default function App() {
               </button>
             );
           })}
-        </div>
-
-        <div style={{ marginTop: 'auto', padding: '1rem 0.8rem', borderTop: '1px solid var(--border)' }}>
-          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>© 2026 Le Soleil — SSPP<br />Prototypes digitaux v2.0</p>
         </div>
       </aside>
 
@@ -532,18 +284,24 @@ export default function App() {
         </header>
 
         <div className="page-content">
-          {tab === 'home'     && <HomePage setTab={setTab} />}
-          {tab === 'news'     && <NewsPage />}
-          {tab === 'archives' && <ArchivesPage />}
-          {tab === 'premium'  && <PremiumPage />}
-          {tab === 'connect'  && <ConnectPage />}
-          {tab === 'tv'       && <TVPage />}
-          {tab === 'jeux'     && <JeuxPage />}
-          {tab === 'briefing' && <BriefingPage />}
-          {tab === 'audio'    && <AudioPage />}
-          {tab === 'pro'      && <ProPage />}
-          {tab === 'events'   && <EventsPage />}
-          {tab === 'ia'       && <IAPage />}
+          {tab === 'home'      && <HomePage setTab={setTab} />}
+          {tab === 'memoire'   && <MemoirePage />}
+          {tab === 'executif'  && <ExecutifPage />}
+          {tab === 'education' && <EducationPage />}
+          {tab === 'zerodata'  && <ZeroDataPage />}
+          
+          {tab === 'jeux'      && <JeuxPage />}
+          {tab === 'briefing'  && <BriefingPage />}
+          {tab === 'audio'     && <AudioPage />}
+          {tab === 'pro'       && <ProPage />}
+          {tab === 'events'    && <EventsPage />}
+          {tab === 'ia'        && <IAPage />}
+          
+          {tab === 'news'      && <NewsPage />}
+          {tab === 'archives'  && <ArchivesPage />}
+          {tab === 'premium'   && <PremiumPage />}
+          {tab === 'connect'   && <ConnectPage />}
+          {tab === 'tv'        && <TVPage />}
         </div>
       </div>
     </div>

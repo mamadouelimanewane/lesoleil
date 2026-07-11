@@ -2203,3 +2203,12 @@ input, textarea, select { font-family: inherit; }
     max-width: 88%;
   }
 }
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes scan-line { 0% { left: -10%; } 100% { left: 110%; } }
+@keyframes pulse-dot { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+.au1 { animation: fadeUp 0.7s 0.1s both; }
+.au2 { animation: fadeUp 0.7s 0.25s both; }
+.au3 { animation: fadeUp 0.7s 0.4s both; }
+.au4 { animation: fadeUp 0.7s 0.55s both; }
+.au5 { animation: fadeUp 0.7s 0.7s both; }
