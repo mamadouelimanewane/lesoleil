@@ -2212,3 +2212,48 @@ input, textarea, select { font-family: inherit; }
 .au3 { animation: fadeUp 0.7s 0.4s both; }
 .au4 { animation: fadeUp 0.7s 0.55s both; }
 .au5 { animation: fadeUp 0.7s 0.7s both; }
+
+/* =======================================
+   LIGHT THEME VARIABLES
+   ======================================= */
+html[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: rgba(255, 255, 255, 1);
+  --border: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(245, 158, 11, 0.5);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-sub: #334155;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --shadow-glow: 0 0 40px rgba(245, 158, 11, 0.15);
+}
+html[data-theme="light"] body {
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(139,92,246,0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(245,158,11,0.06), transparent);
+}
+
+/* =======================================
+   RETRACTABLE SIDEBAR
+   ======================================= */
+.app-layout.sidebar-collapsed {
+  --sidebar-w: 80px;
+}
+.sidebar-collapsed .sidebar-logo-text,
+.sidebar-collapsed .nav-section-label,
+.sidebar-collapsed .nav-item-label,
+.sidebar-collapsed .nav-badge {
+  display: none !important;
+}
+.sidebar-collapsed .nav-item {
+  justify-content: center;
+  padding: 0.8rem 0;
+}
+.sidebar-collapsed .sidebar-logo {
+  justify-content: center;
+  padding-left: 0;
+}
+.collapse-btn:hover {
+  background: var(--bg-card-hover) !important;
+}
