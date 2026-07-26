@@ -120,6 +120,9 @@ function LandingPage({ setTab }) {
           <a href="#applications" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', padding: '14px 32px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 0 30px rgba(245,158,11,0.3)', transition: 'all 0.2s' }}>
             Explorer les 15 applications →
           </a>
+          <a href="/brochure/le-soleil-digital-dossier-complet-2026.pdf" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--bg-card)', color: 'var(--text-main)', padding: '14px 32px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, textDecoration: 'none', border: '1px solid var(--border)', transition: 'all 0.2s' }}>
+            <FileText size={18} /> Télécharger la brochure complète
+          </a>
         </div>
 
         <div className="au5 glass" style={{ maxWidth: '780px', margin: '3.5rem auto 0', padding: '2rem 2.5rem', textAlign: 'left', border: '1px solid var(--border)', borderRadius: '16px' }}>
