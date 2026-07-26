@@ -120,7 +120,7 @@ function LandingPage({ setTab }) {
           <a href="#applications" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: '#fff', padding: '14px 32px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, textDecoration: 'none', boxShadow: '0 0 30px rgba(245,158,11,0.3)', transition: 'all 0.2s' }}>
             Explorer les 15 applications →
           </a>
-          <a href="/brochure/le-soleil-digital-dossier-complet-2026.pdf" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--bg-card)', color: 'var(--text-main)', padding: '14px 32px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, textDecoration: 'none', border: '1px solid var(--border)', transition: 'all 0.2s' }}>
+          <a href="/brochure/le-soleil-digital-dossier-complet-2026.pdf" download="Le-Soleil-Digital-Dossier-Complet-2026.pdf" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--bg-card)', color: 'var(--text-main)', padding: '14px 32px', borderRadius: '12px', fontSize: '16px', fontWeight: 700, textDecoration: 'none', border: '1px solid var(--border)', transition: 'all 0.2s' }}>
             <FileText size={18} /> Télécharger la brochure complète
           </a>
         </div>
@@ -209,9 +209,8 @@ function AppShell({ tab, setTab, theme, setTheme }) {
         <div className="topbar-meta">
           <a
             href={`/fiches/${tab}.pdf`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Consulter la fiche PDF de cette application"
+            download={`Le-Soleil-Fiche-${tab}.pdf`}
+            title="Télécharger la fiche PDF de cette application"
             style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', borderRadius: '6px', border: '1px solid var(--border)', color: 'var(--text-main)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none' }}
           >
             <FileText size={15} /> Fiche PDF

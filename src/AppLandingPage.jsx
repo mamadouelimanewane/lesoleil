@@ -41,8 +41,7 @@ export default function AppLandingPage({ data, onLaunch, onBack }) {
             </button>
             <a
               href={pdfHref}
-              target="_blank"
-              rel="noopener noreferrer"
+              download={`Le-Soleil-Fiche-${id}.pdf`}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255,255,255,0.1)', color: '#fff', padding: '1rem 2.2rem', borderRadius: '14px', fontWeight: 700, fontSize: '1.1rem', border: '1px solid rgba(255,255,255,0.35)', cursor: 'pointer', textDecoration: 'none', transition: 'background 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
               onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
