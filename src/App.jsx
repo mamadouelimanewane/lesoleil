@@ -20,6 +20,11 @@ import ExecutifPage from './ExecutifPage';
 import EducationPage from './EducationPage';
 import ZeroDataPage from './ZeroDataPage';
 import AppLandingPage from './AppLandingPage';
+import NewsPage from './NewsPage';
+import ArchivesPage from './ArchivesPage';
+import PremiumPage from './PremiumPage';
+import ConnectPage from './ConnectPage';
+import TVPage from './TVPage';
 import { APPS_DATA } from './appsData';
 
 /* =======================================
@@ -322,12 +327,11 @@ function AppShell({ tab, setTab, theme, setTheme }) {
           {tab === 'events'    && <EventsPage />}
           {tab === 'ia'        && <IAPage />}
           
-          {/* Placeholder for standard apps */}
-          {tab === 'news'      && <div className="fade-up page-header"><h2>Le Soleil News</h2><p>Fil d'actualité temps réel</p></div>}
-          {tab === 'archives'  && <div className="fade-up page-header"><h2>Soleil Archives</h2><p>Moteur de recherche patrimonial</p></div>}
-          {tab === 'premium'   && <div className="fade-up page-header"><h2>Soleil Premium</h2><p>Abonnements et e-paper</p></div>}
-          {tab === 'connect'   && <div className="fade-up page-header"><h2>Soleil Connect</h2><p>Réseau de correspondants</p></div>}
-          {tab === 'tv'        && <div className="fade-up page-header"><h2>Soleil TV+</h2><p>Web TV en direct</p></div>}
+          {tab === 'news'      && <NewsPage />}
+          {tab === 'archives'  && <ArchivesPage />}
+          {tab === 'premium'   && <PremiumPage />}
+          {tab === 'connect'   && <ConnectPage />}
+          {tab === 'tv'        && <TVPage />}
         </div>
       </div>
     </div>
