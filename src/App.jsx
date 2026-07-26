@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Newspaper, Archive, MonitorPlay, Users, BookOpen,
-  Sun, Search, Play, Send, ChevronLeft, TrendingUp,
-  Globe, Bell, Menu, X, ArrowRight, Zap, Star,
-  Gamepad2, Mail, Headphones, Briefcase, Calendar, Sparkles,
-  Database, Shield, GraduationCap, Wifi, Check, Moon,
-  Home
-} from 'lucide-react';
+import { Sun, Bell, ArrowLeft } from 'lucide-react';
 import './App.css';
 
 import JeuxPage from './JeuxPage';
@@ -30,24 +23,6 @@ import { APPS_DATA } from './appsData';
 /* =======================================
    DATA
    ======================================= */
-const TABS = [
-  { id: 'memoire',   label: 'Mémoire de la Nation', icon: Database,   badge: 'État' },
-  { id: 'executif',  label: 'Soleil Exécutif',    icon: Shield,       badge: 'VIP' },
-  { id: 'education', label: 'Soleil Éducation',   icon: GraduationCap,badge: 'B2G' },
-  { id: 'zerodata',  label: 'Zéro Data Telco',    icon: Wifi,         badge: 'Tech' },
-  { id: 'jeux',      label: 'Soleil Jeux',        icon: Gamepad2,     badge: 'Nouveau' },
-  { id: 'briefing',  label: 'Soleil Briefing',    icon: Mail,         badge: null },
-  { id: 'audio',     label: 'Soleil Audio',       icon: Headphones,   badge: null },
-  { id: 'pro',       label: 'Soleil Pro / B2B',   icon: Briefcase,    badge: null },
-  { id: 'events',    label: 'Le Soleil Events',   icon: Calendar,     badge: null },
-  { id: 'ia',        label: 'Soleil IA',          icon: Sparkles,     badge: 'Beta' },
-  { id: 'news',      label: 'Le Soleil News',     icon: Newspaper,    badge: null },
-  { id: 'archives',  label: 'Soleil Archives',    icon: Archive,      badge: null },
-  { id: 'premium',   label: 'Soleil Premium',     icon: BookOpen,     badge: null },
-  { id: 'connect',   label: 'Soleil Connect',     icon: Users,        badge: null },
-  { id: 'tv',        label: 'Soleil TV+',         icon: MonitorPlay,  badge: 'LIVE' },
-];
-
 const TITLES = {
   memoire: 'Mémoire de la Nation', executif: 'Soleil Exécutif (B2G)', education: 'Soleil Éducation', zerodata: 'Inclusion & Zéro Data',
   jeux: 'Soleil Jeux', briefing: 'Soleil Briefing', audio: 'Soleil Audio', pro: 'Soleil Pro / B2B', events: 'Le Soleil Events', ia: 'Soleil IA',
@@ -219,120 +194,48 @@ function LandingPage({ setTab }) {
    APP SHELL
    ======================================= */
 function AppShell({ tab, setTab, theme, setTheme }) {
-  const [open, setOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
-
-  const navigate = (id) => { setTab(id); setOpen(false); window.scrollTo(0, 0); };
-
   return (
-    <div className={`app-layout ${collapsed ? 'sidebar-collapsed' : ''}`}>
-      {/* Hamburger */}
-      <button className="hamburger" onClick={() => setOpen(o => !o)}>
-        {open ? <X size={22} /> : <Menu size={22} />}
-      </button>
-
-      {/* Overlay */}
-      <div className={`overlay ${open ? 'open' : ''}`} onClick={() => setOpen(false)} />
-
-      {/* Sidebar */}
-      <aside className={`sidebar ${open ? 'open' : ''}`}>
-        {/* Toggle Collapse Button (Desktop only) */}
-        <button 
-          className="collapse-btn" 
-          onClick={() => setCollapsed(!collapsed)}
-          style={{ position: 'absolute', right: '-12px', top: '24px', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: '50%', padding: '4px', zIndex: 10, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <ChevronLeft size={14} style={{ transform: collapsed ? 'rotate(180deg)' : 'none', transition: '0.3s', color: 'var(--text-main)' }} />
-        </button>
-
-        <div className="sidebar-logo">
-          <Sun size={36} color="#f59e0b" style={{ flexShrink: 0 }} />
-          <div className="sidebar-logo-text">
-            Le Soleil
-            <small>Prototypes Digitaux</small>
-          </div>
+    <div className="main">
+      <header className="topbar">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <button className="btn btn-ghost btn-sm" onClick={() => setTab('home')} title="Retour à la page d'accueil des applications" style={{ padding: '0.5rem 0.8rem', borderRadius: '8px', background: 'var(--primary)', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem', border: 'none' }}>
+            <ArrowLeft size={16} /> <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>Retour aux applications</span>
+          </button>
+          <span className="topbar-title" style={{ marginLeft: '1rem' }}>{TITLES[tab]}</span>
         </div>
-
-        <div style={{ overflowY: 'auto', flex: 1, paddingRight: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.2rem', overflowX: 'hidden' }}>
-          
-          <span className="nav-section-label" style={{ marginTop: '0.5rem' }}>Projets d'État & Souveraineté</span>
-          {TABS.slice(0, 4).map(t => {
-            const Icon = t.icon;
-            return (
-              <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)} title={t.label}>
-                <Icon size={19} style={{ flexShrink: 0 }} /> <span className="nav-item-label">{t.label}</span>
-                {t.badge && <span className="nav-badge" style={{ background: '#ef4444' }}>{t.badge}</span>}
-              </button>
-            );
-          })}
-
-          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Nouveaux Moteurs (2026)</span>
-          {TABS.slice(4, 10).map(t => {
-            const Icon = t.icon;
-            return (
-              <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)} title={t.label}>
-                <Icon size={19} style={{ flexShrink: 0 }} /> <span className="nav-item-label">{t.label}</span>
-                {t.badge && <span className="nav-badge" style={{ background: t.id === 'jeux' ? 'var(--success)' : (t.id === 'ia' ? 'var(--accent)' : 'var(--danger)') }}>{t.badge}</span>}
-              </button>
-            );
-          })}
-
-          <span className="nav-section-label" style={{ marginTop: '1rem' }}>Plateformes Historiques</span>
-          {TABS.slice(10).map(t => {
-            const Icon = t.icon;
-            return (
-              <button key={t.id} className={`nav-item ${tab === t.id ? 'active' : ''}`} onClick={() => navigate(t.id)} title={t.label}>
-                <Icon size={19} style={{ flexShrink: 0 }} /> <span className="nav-item-label">{t.label}</span>
-                {t.badge && <span className="nav-badge">{t.badge}</span>}
-              </button>
-            );
-          })}
+        <div className="topbar-meta">
+          <select
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            style={{ background: 'var(--bg-card)', color: 'var(--text-main)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.3rem 0.5rem', fontSize: '0.8rem', outline: 'none', cursor: 'pointer' }}
+          >
+            <option value="smart">🤖 Mode Smart</option>
+            <option value="dark">🌙 Mode Sombre</option>
+            <option value="light">☀️ Mode Clair</option>
+          </select>
+          <div className="live-chip" style={{ marginLeft: '0.5rem' }}><div className="live-dot" />LIVE</div>
+          <Bell size={20} style={{ color: 'var(--text-muted)', cursor: 'pointer' }} />
         </div>
-      </aside>
+      </header>
 
-      {/* Main */}
-      <div className="main">
-        <header className="topbar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <button className="btn btn-ghost btn-sm" onClick={() => setTab('home')} title="Retour à la Landing Page" style={{ padding: '0.5rem 0.8rem', borderRadius: '8px', background: 'var(--primary)', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem', border: 'none' }}>
-              <Home size={16} /> <span style={{ fontWeight: 600, fontSize: '0.85rem' }}>Accueil</span>
-            </button>
-            <span className="topbar-title" style={{ marginLeft: '1rem' }}>{TITLES[tab]}</span>
-          </div>
-          <div className="topbar-meta">
-            <select 
-              value={theme} 
-              onChange={(e) => setTheme(e.target.value)}
-              style={{ background: 'var(--bg-card)', color: 'var(--text-main)', border: '1px solid var(--border)', borderRadius: '6px', padding: '0.3rem 0.5rem', fontSize: '0.8rem', outline: 'none', cursor: 'pointer' }}
-            >
-              <option value="smart">🤖 Mode Smart</option>
-              <option value="dark">🌙 Mode Sombre</option>
-              <option value="light">☀️ Mode Clair</option>
-            </select>
-            <div className="live-chip" style={{ marginLeft: '0.5rem' }}><div className="live-dot" />LIVE</div>
-            <Bell size={20} style={{ color: 'var(--text-muted)', cursor: 'pointer' }} />
-          </div>
-        </header>
+      <div className="page-content">
+        {tab === 'memoire'   && <MemoirePage />}
+        {tab === 'executif'  && <ExecutifPage />}
+        {tab === 'education' && <EducationPage />}
+        {tab === 'zerodata'  && <ZeroDataPage />}
 
-        <div className="page-content">
-          {tab === 'memoire'   && <MemoirePage />}
-          {tab === 'executif'  && <ExecutifPage />}
-          {tab === 'education' && <EducationPage />}
-          {tab === 'zerodata'  && <ZeroDataPage />}
-          
-          {tab === 'jeux'      && <JeuxPage />}
-          {tab === 'briefing'  && <BriefingPage />}
-          {tab === 'audio'     && <AudioPage />}
-          {tab === 'pro'       && <ProPage />}
-          {tab === 'events'    && <EventsPage />}
-          {tab === 'ia'        && <IAPage />}
-          
-          {tab === 'news'      && <NewsPage />}
-          {tab === 'archives'  && <ArchivesPage />}
-          {tab === 'premium'   && <PremiumPage />}
-          {tab === 'connect'   && <ConnectPage />}
-          {tab === 'tv'        && <TVPage />}
-        </div>
+        {tab === 'jeux'      && <JeuxPage />}
+        {tab === 'briefing'  && <BriefingPage />}
+        {tab === 'audio'     && <AudioPage />}
+        {tab === 'pro'       && <ProPage />}
+        {tab === 'events'    && <EventsPage />}
+        {tab === 'ia'        && <IAPage />}
+
+        {tab === 'news'      && <NewsPage />}
+        {tab === 'archives'  && <ArchivesPage />}
+        {tab === 'premium'   && <PremiumPage />}
+        {tab === 'connect'   && <ConnectPage />}
+        {tab === 'tv'        && <TVPage />}
       </div>
     </div>
   );
