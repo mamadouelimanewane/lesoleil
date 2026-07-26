@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Delivery folder — canonical copies used by the site live in public/fiches
+fiches-pdf/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

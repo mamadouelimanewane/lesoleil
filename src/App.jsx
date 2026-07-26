@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sun, Bell, ArrowLeft } from 'lucide-react';
+import { Sun, Bell, ArrowLeft, FileText } from 'lucide-react';
 import './App.css';
 
 import JeuxPage from './JeuxPage';
@@ -204,6 +204,15 @@ function AppShell({ tab, setTab, theme, setTheme }) {
           <span className="topbar-title" style={{ marginLeft: '1rem' }}>{TITLES[tab]}</span>
         </div>
         <div className="topbar-meta">
+          <a
+            href={`/fiches/${tab}.pdf`}
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Consulter la fiche PDF de cette application"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.8rem', borderRadius: '6px', border: '1px solid var(--border)', color: 'var(--text-main)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none' }}
+          >
+            <FileText size={15} /> Fiche PDF
+          </a>
           <select
             value={theme}
             onChange={(e) => setTheme(e.target.value)}

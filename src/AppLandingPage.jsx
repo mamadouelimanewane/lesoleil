@@ -1,9 +1,10 @@
 import React from 'react';
-import { ArrowRight, CheckCircle, ChevronLeft, Rocket, Star, Users, Zap } from 'lucide-react';
+import { ArrowRight, CheckCircle, ChevronLeft, FileText, Rocket, Star, Users, Zap } from 'lucide-react';
 
 export default function AppLandingPage({ data, onLaunch, onBack }) {
   if (!data) return null;
-  const { icon, color, gradient, category, title, tagline, description, stats, howItWorks, innovation, valueFor } = data;
+  const { id, icon, color, gradient, category, title, tagline, description, stats, howItWorks, innovation, valueFor } = data;
+  const pdfHref = `/fiches/${id}.pdf`;
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text-main)' }}>
@@ -29,14 +30,26 @@ export default function AppLandingPage({ data, onLaunch, onBack }) {
           <div style={{ fontSize: '5rem', marginBottom: '1.5rem', lineHeight: 1 }}>{icon}</div>
           <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, color: '#fff', margin: '0 0 1.5rem', lineHeight: 1.1, letterSpacing: '-0.02em' }}>{title}</h1>
           <p style={{ fontSize: 'clamp(1.1rem, 2.5vw, 1.5rem)', color: 'rgba(255,255,255,0.85)', maxWidth: '650px', margin: '0 auto 3rem', lineHeight: 1.6, fontWeight: 500 }}>{tagline}</p>
-          <button
-            onClick={onLaunch}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: '#fff', color: '#111', padding: '1rem 2.5rem', borderRadius: '14px', fontWeight: 800, fontSize: '1.1rem', border: 'none', cursor: 'pointer', boxShadow: `0 20px 40px rgba(0,0,0,0.3)`, transition: 'transform 0.2s' }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
-            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-          >
-            <Rocket size={22} /> Lancer l'application <ArrowRight size={18} />
-          </button>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={onLaunch}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: '#fff', color: '#111', padding: '1rem 2.5rem', borderRadius: '14px', fontWeight: 800, fontSize: '1.1rem', border: 'none', cursor: 'pointer', boxShadow: `0 20px 40px rgba(0,0,0,0.3)`, transition: 'transform 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              <Rocket size={22} /> Lancer l'application <ArrowRight size={18} />
+            </button>
+            <a
+              href={pdfHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255,255,255,0.1)', color: '#fff', padding: '1rem 2.2rem', borderRadius: '14px', fontWeight: 700, fontSize: '1.1rem', border: '1px solid rgba(255,255,255,0.35)', cursor: 'pointer', textDecoration: 'none', transition: 'background 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            >
+              <FileText size={20} /> Consulter la fiche PDF
+            </a>
+          </div>
         </div>
       </section>
 
@@ -137,12 +150,21 @@ export default function AppLandingPage({ data, onLaunch, onBack }) {
           <Star size={48} color="rgba(255,255,255,0.6)" style={{ margin: '0 auto 1.5rem' }} />
           <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 900, color: '#fff', marginBottom: '1rem' }}>Prêt à explorer {title} ?</h2>
           <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: '1.2rem', marginBottom: '3rem' }}>Découvrez le prototype complet et interactif dès maintenant.</p>
-          <button
-            onClick={onLaunch}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: '#fff', color: '#111', padding: '1.2rem 3rem', borderRadius: '14px', fontWeight: 800, fontSize: '1.2rem', border: 'none', cursor: 'pointer', boxShadow: `0 20px 40px rgba(0,0,0,0.3)` }}
-          >
-            <Zap size={24} /> Lancer l'application <ArrowRight size={20} />
-          </button>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={onLaunch}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: '#fff', color: '#111', padding: '1.2rem 3rem', borderRadius: '14px', fontWeight: 800, fontSize: '1.2rem', border: 'none', cursor: 'pointer', boxShadow: `0 20px 40px rgba(0,0,0,0.3)` }}
+            >
+              <Zap size={24} /> Lancer l'application <ArrowRight size={20} />
+            </button>
+            <a
+              href={pdfHref}
+              download
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255,255,255,0.1)', color: '#fff', padding: '1.2rem 2.6rem', borderRadius: '14px', fontWeight: 700, fontSize: '1.2rem', border: '1px solid rgba(255,255,255,0.35)', cursor: 'pointer', textDecoration: 'none' }}
+            >
+              <FileText size={22} /> Télécharger la fiche PDF
+            </a>
+          </div>
         </div>
       </section>
     </div>
